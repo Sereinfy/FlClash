@@ -34,7 +34,7 @@ class VpnService : SystemVpnService(), IBaseService {
     }
 
     private val connectivity by lazy {
-        this.getSystemService<ConnectivityManager>()
+        getSystemService<ConnectivityManager>()
     }
     private val uidPageNameMap = mutableMapOf<Int, String>()
 

@@ -182,7 +182,7 @@ func nextHandle(action *Action, result ActionResult) bool {
 
 //export invokeAction
 func invokeAction(callback unsafe.Pointer, paramsChar *C.char) {
-	params := C.GoString(paramsChar)
+	params := parseCString(paramsChar)
 	var action = &Action{}
 	err := json.Unmarshal([]byte(params), action)
 	if err != nil {
@@ -199,7 +199,7 @@ func invokeAction(callback unsafe.Pointer, paramsChar *C.char) {
 
 //export startTUN
 func startTUN(callback unsafe.Pointer, fd C.int, addressChar, dnsChar *C.char) bool {
-	handleStartTun(callback, int(fd), C.GoString(addressChar), C.GoString(dnsChar))
+	handleStartTun(callback, int(fd), parseCString(addressChar), parseCString(dnsChar))
 	return true
 }
 
@@ -245,6 +245,5 @@ func forceGC() {
 
 //export updateDns
 func updateDns(s *C.char) {
-	dnsList := C.GoString(s)
-	handleUpdateDns(dnsList)
+	handleUpdateDns(parseCString(s))
 }

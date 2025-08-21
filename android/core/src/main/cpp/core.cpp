@@ -10,9 +10,9 @@ JNIEXPORT void JNICALL
 Java_com_follow_clash_core_Core_startTun(JNIEnv *env, jobject thiz, jint fd, jobject cb,
                                          jstring address, jstring dns) {
     const auto interface = new_global(cb);
-    scoped_string ac = get_string(address);
-    scoped_string dc = get_string(dns);
-    startTUN(interface, fd, ac, dc);
+    scoped_string addressChar = get_string(address);
+    scoped_string dnsChar = get_string(dns);
+    startTUN(interface, fd, addressChar, dnsChar);
 }
 
 extern "C"
@@ -30,16 +30,16 @@ Java_com_follow_clash_core_Core_forceGC(JNIEnv *env, jobject thiz) {
 extern "C"
 JNIEXPORT void JNICALL
 Java_com_follow_clash_core_Core_updateDNS(JNIEnv *env, jobject thiz, jstring dns) {
-    scoped_string dc = get_string(dns);
-    updateDns(dc);
+    scoped_string dnsChar = get_string(dns);
+    updateDns(dnsChar);
 }
 
 extern "C"
 JNIEXPORT void JNICALL
 Java_com_follow_clash_core_Core_invokeAction(JNIEnv *env, jobject thiz, jstring data, jobject cb) {
     const auto interface = new_global(cb);
-    scoped_string sd = get_string(data);
-    invokeAction(interface, sd);
+    scoped_string paramsChar = get_string(data);
+    invokeAction(interface, paramsChar);
 }
 
 extern "C"
