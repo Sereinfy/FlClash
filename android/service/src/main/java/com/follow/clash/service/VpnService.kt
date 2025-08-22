@@ -21,12 +21,22 @@ import com.follow.clash.service.models.getIpv6RouteAddress
 import com.follow.clash.service.models.toCIDR
 import com.follow.clash.service.modules.NetworkObserveModule
 import com.follow.clash.service.modules.NotificationModule
+import com.follow.clash.service.modules.moduleLoader
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import java.net.InetSocketAddress
 import android.net.VpnService as SystemVpnService
 
-class VpnService : SystemVpnService(), IBaseService {
-    val notificationModule = NotificationModule(this)
-    val networkObserveModule = NetworkObserveModule(this)
+class VpnService : SystemVpnService(), IBaseService,
+    CoroutineScope by CoroutineScope(Dispatchers.Default) {
+
+    private val self: VpnService
+        get() = this
+
+    private val loader = moduleLoader {
+        install(NetworkObserveModule(self))
+        install(NotificationModule(self))
+    }
 
     override fun onCreate() {
         super.onCreate()
@@ -215,16 +225,14 @@ class VpnService : SystemVpnService(), IBaseService {
     }
 
     override fun start() {
-        notificationModule.install()
-        networkObserveModule.install()
+        loader.load()
         State.options?.let {
             handleStart(it)
         }
     }
 
     override fun stop() {
-        notificationModule.uninstall()
-        networkObserveModule.uninstall()
+        loader.cancel()
         Core.stopTun()
         stopSelf()
     }

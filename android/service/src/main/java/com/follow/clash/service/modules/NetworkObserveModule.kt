@@ -11,7 +11,6 @@ import android.net.NetworkRequest
 import android.os.Build
 import androidx.core.content.getSystemService
 import com.follow.clash.core.Core
-import com.follow.clash.service.VpnService
 import java.net.Inet4Address
 import java.net.Inet6Address
 import java.net.InetAddress
@@ -33,6 +32,9 @@ class NetworkObserveModule(private val service: Service) : Module() {
     private val request = NetworkRequest.Builder().apply {
         addCapability(NetworkCapabilities.NET_CAPABILITY_NOT_VPN)
         addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            addCapability(NetworkCapabilities.NET_CAPABILITY_FOREGROUND)
+        }
         addCapability(NetworkCapabilities.NET_CAPABILITY_NOT_RESTRICTED)
     }.build()
 
@@ -98,9 +100,9 @@ class NetworkObserveModule(private val service: Service) : Module() {
     }
 
     fun setUnderlyingNetworks(network: Network) {
-        if (service is VpnService && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
-            service.setUnderlyingNetworks(arrayOf(network))
-        }
+//        if (service is VpnService && Build.VERSION.SDK_INT in 22..28) {
+//            service.setUnderlyingNetworks(arrayOf(network))
+//        }
     }
 
     override fun onUninstall() {

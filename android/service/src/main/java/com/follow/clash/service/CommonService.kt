@@ -7,10 +7,20 @@ import android.os.IBinder
 import com.follow.clash.core.Core
 import com.follow.clash.service.modules.NetworkObserveModule
 import com.follow.clash.service.modules.NotificationModule
+import com.follow.clash.service.modules.moduleLoader
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 
-class CommonService : Service(), IBaseService {
-    val notificationModule = NotificationModule(this)
-    val networkObserveModule = NetworkObserveModule(this)
+class CommonService : Service(), IBaseService,
+    CoroutineScope by CoroutineScope(Dispatchers.Default) {
+
+    private val self: CommonService
+        get() = this
+
+    private val loader = moduleLoader {
+        install(NetworkObserveModule(self))
+        install(NotificationModule(self))
+    }
 
     override fun onCreate() {
         super.onCreate()
@@ -33,14 +43,11 @@ class CommonService : Service(), IBaseService {
     }
 
     override fun start() {
-        notificationModule.install()
-        networkObserveModule.install()
-
+        loader.load()
     }
 
     override fun stop() {
-        notificationModule.uninstall()
-        notificationModule.uninstall()
+        loader.cancel()
         stopSelf()
     }
 }

@@ -2,17 +2,17 @@ package com.follow.clash.service.modules
 
 abstract class Module {
 
-    var isInstall: Boolean = false
+    private var isInstall: Boolean = false
 
     protected abstract fun onInstall()
     protected abstract fun onUninstall()
 
-    fun install(){
+    fun install() {
         isInstall = true
         onInstall()
     }
 
-    fun uninstall(){
+    fun uninstall() {
         onUninstall()
         isInstall = false
     }

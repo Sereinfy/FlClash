@@ -56,19 +56,6 @@ class NotificationModule(private val service: Service) : Module() {
                 .collect { (params, _) ->
                     update(params!!)
                 }
-
-//            combine(
-//                State.notificationParamsFlow,
-//                screenFlow,
-//            ) { params, shouldUpdate ->
-//                params to shouldUpdate
-//            }.collect { (params, shouldUpdate) ->
-//                {
-//                    params?.takeIf { shouldUpdate }?.let {
-//                        update(it)
-//                    }
-//                }
-//            }
         }
     }
 

@@ -10,7 +10,7 @@ data class Traffic(
 )
 
 val Traffic.speedText: String
-    get() = "${up.formatBytes}/s ↑  ${down.formatBytes}/s ↓"
+    get() = "${up.formatBytes}/s↑  ${down.formatBytes}/s↓"
 
 fun Core.getSpeedTrafficText(onlyStatisticsProxy: Boolean): String {
     val res = getTraffic(onlyStatisticsProxy)
