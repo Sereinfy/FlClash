@@ -7,7 +7,6 @@ import 'package:fl_clash/clash/interface.dart';
 import 'package:fl_clash/common/common.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/models/core.dart';
-import 'package:fl_clash/state.dart';
 
 class ClashService extends ClashHandlerInterface {
   static ClashService? _instance;
@@ -39,46 +38,33 @@ class ClashService extends ClashHandlerInterface {
   }
 
   void _initServer() {
-    runZonedGuarded(() async {
-      final address = !system.isWindows
-          ? InternetAddress(
-              unixSocketPath,
-              type: InternetAddressType.unix,
-            )
-          : InternetAddress(
-              localhost,
-              type: InternetAddressType.IPv4,
-            );
-      await _deleteSocketFile();
-      final server = await ServerSocket.bind(
-        address,
-        0,
-        shared: true,
-      );
-      serverCompleter.complete(server);
-      await for (final socket in server) {
-        await _destroySocket();
-        socketCompleter.complete(socket);
-        socket
-            .transform(uint8ListToListIntConverter)
-            .transform(utf8.decoder)
-            .transform(LineSplitter())
-            .listen(
-          (data) {
-            handleResult(
-              ActionResult.fromJson(
-                json.decode(data.trim()),
-              ),
-            );
-          },
-        );
-      }
-    }, (error, stack) {
-      commonPrint.log(error.toString());
-      if (error is SocketException) {
-        globalState.showNotifier(error.toString());
-      }
-    });
+    runZonedGuarded(
+      () async {
+        final address = !system.isWindows
+            ? InternetAddress(unixSocketPath, type: InternetAddressType.unix)
+            : InternetAddress(localhost, type: InternetAddressType.IPv4);
+        await _deleteSocketFile();
+        final server = await ServerSocket.bind(address, 0, shared: true);
+        serverCompleter.complete(server);
+        await for (final socket in server) {
+          await _destroySocket();
+          socketCompleter.complete(socket);
+          socket
+              .transform(uint8ListToListIntConverter)
+              .transform(utf8.decoder)
+              .transform(LineSplitter())
+              .listen((data) {
+                handleResult(ActionResult.fromJson(json.decode(data.trim())));
+              });
+        }
+      },
+      (error, stack) {
+        // commonPrint.log(error.toString());
+        // if (error is SocketException) {
+        //   globalState.showNotifier(error.toString());
+        // }
+      },
+    );
   }
 
   Future<void> start() async {
@@ -95,12 +81,7 @@ class ClashService extends ClashHandlerInterface {
         return;
       }
     }
-    process = await Process.start(
-      appPath.corePath,
-      [
-        arg,
-      ],
-    );
+    process = await Process.start(appPath.corePath, [arg]);
     process?.stdout.listen((_) {});
     process?.stderr.listen((e) {
       final error = utf8.decode(e);
@@ -168,24 +149,16 @@ class ClashService extends ClashHandlerInterface {
 
     callbackCompleterMap[id] = Completer<T?>();
 
-    sendMessage(
-      json.encode(
-        Action(
-          id: id,
-          method: method,
-          data: data,
-        ),
-      ),
-    );
+    sendMessage(json.encode(Action(id: id, method: method, data: data)));
 
     return (callbackCompleterMap[id] as Completer<T?>).future.withTimeout(
-          timeout: timeout,
-          onLast: () {
-            callbackCompleterMap.remove(id);
-          },
-          tag: id,
-          onTimeout: () => null,
-        );
+      timeout: timeout,
+      onLast: () {
+        callbackCompleterMap.remove(id);
+      },
+      tag: id,
+      onTimeout: () => null,
+    );
   }
 }
 
