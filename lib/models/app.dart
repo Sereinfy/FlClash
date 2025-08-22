@@ -37,6 +37,7 @@ abstract class AppState with _$AppState {
     required SystemUiOverlayStyle systemUiOverlayStyle,
     ProfileOverrideModel? profileOverrideModel,
     @Default({}) Map<QueryTag, String> queryMap,
+    @Default(false) bool isConnected,
   }) = _AppState;
 }
 

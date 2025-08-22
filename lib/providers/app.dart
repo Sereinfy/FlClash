@@ -380,6 +380,19 @@ class ProfileOverrideState extends _$ProfileOverrideState
 }
 
 @riverpod
+class Connected extends _$Connected with AutoDisposeNotifierMixin {
+  @override
+  bool build() {
+    return globalState.appState.isConnected;
+  }
+
+  @override
+  onUpdate(value) {
+    globalState.appState = globalState.appState.copyWith(isConnected: value);
+  }
+}
+
+@riverpod
 class QueryMap extends _$QueryMap with AutoDisposeNotifierMixin {
   @override
   Map<QueryTag, String> build() => globalState.appState.queryMap;

@@ -51,15 +51,15 @@ class MessageManagerState extends State<MessageManager> {
       Future.delayed(commonMessage.duration, () {
         _handleRemove(commonMessage);
       });
-      if (_bufferMessages.isEmpty) {
-        _pushing = false;
-      }
     }
   }
 
   Future<void> _handleRemove(CommonMessage commonMessage) async {
     _messagesNotifier.value = List<CommonMessage>.from(_messagesNotifier.value)
       ..remove(commonMessage);
+    if (_bufferMessages.isEmpty) {
+      _pushing = false;
+    }
   }
 
   @override
@@ -94,9 +94,23 @@ class MessageManagerState extends State<MessageManager> {
                             width: min(constraints.maxWidth, 500),
                             padding: EdgeInsets.symmetric(
                               horizontal: 12,
-                              vertical: 16,
+                              vertical: 10,
                             ),
-                            child: Text(messages.last.text),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Flexible(child: Text(messages.last.text)),
+                                IconButton(
+                                  visualDensity: VisualDensity.compact,
+                                  iconSize: 18,
+                                  padding: EdgeInsets.zero,
+                                  onPressed: () {
+                                    _handleRemove(messages.last);
+                                  },
+                                  icon: Icon(Icons.close),
+                                ),
+                              ],
+                            ),
                           ),
                         );
                       },

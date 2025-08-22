@@ -537,6 +537,7 @@ class AppController {
     await _handlePreference();
     await _handlerDisclaimer();
     _ref.read(initProvider.notifier).value = true;
+    _ref.read(connectedProvider.notifier).value = true;
   }
 
   Future<void> _initStatus() async {
@@ -761,6 +762,10 @@ class AppController {
         .updateState(
           (state) => state.copyWith(systemProxy: !state.systemProxy),
         );
+  }
+
+  void handleCoreDisconnected() {
+    _ref.read(connectedProvider.notifier).value = false;
   }
 
   Future<List<Package>> getPackages() async {

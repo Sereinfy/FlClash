@@ -38,15 +38,16 @@ class ClashService extends ClashHandlerInterface {
   }
 
   void _initServer() {
+    ServerSocket? server;
     runZonedGuarded(
       () async {
         final address = !system.isWindows
             ? InternetAddress(unixSocketPath, type: InternetAddressType.unix)
             : InternetAddress(localhost, type: InternetAddressType.IPv4);
         await _deleteSocketFile();
-        final server = await ServerSocket.bind(address, 0, shared: true);
+        server = await ServerSocket.bind(address, 0, shared: true);
         serverCompleter.complete(server);
-        await for (final socket in server) {
+        await for (final socket in server!) {
           await _destroySocket();
           socketCompleter.complete(socket);
           socket
@@ -58,14 +59,16 @@ class ClashService extends ClashHandlerInterface {
               });
         }
       },
-      (error, stack) {
-        // commonPrint.log(error.toString());
-        // if (error is SocketException) {
-        //   globalState.showNotifier(error.toString());
-        // }
+      (error, stack) async {
+        commonPrint.log(error.toString());
+        if (error is SocketException) {
+          // globalState.showNotifier(error.toString());
+        }
       },
     );
   }
+
+  Future<Socket> get socket => socketCompleter.future;
 
   Future<void> start() async {
     if (process != null) {

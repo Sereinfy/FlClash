@@ -20,9 +20,7 @@ class DeveloperView extends ConsumerWidget {
         ListItem(
           title: Text(appLocalizations.messageTest),
           onTap: () {
-            context.showNotifier(
-              appLocalizations.messageTestTip,
-            );
+            context.showNotifier('${appLocalizations.messageTestTip}');
           },
         ),
         ListItem(
@@ -31,10 +29,7 @@ class DeveloperView extends ConsumerWidget {
             for (int i = 0; i < 1000; i++) {
               globalState.appController.addLog(
                 Log.app(
-                  '[$i]${utils.generateRandomString(
-                    maxLength: 200,
-                    minLength: 20,
-                  )}',
+                  '[$i]${utils.generateRandomString(maxLength: 200, minLength: 20)}',
                 ),
               );
             }
@@ -65,9 +60,7 @@ class DeveloperView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ref) {
     final enable = ref.watch(
-      appSettingProvider.select(
-        (state) => state.developerMode,
-      ),
+      appSettingProvider.select((state) => state.developerMode),
     );
     return SingleChildScrollView(
       padding: baseInfoEdgeInsets,
@@ -77,27 +70,22 @@ class DeveloperView extends ConsumerWidget {
             type: CommonCardType.filled,
             radius: 18,
             child: ListItem.switchItem(
-              padding: const EdgeInsets.only(
-                left: 16,
-                right: 16,
-              ),
+              padding: const EdgeInsets.only(left: 16, right: 16),
               title: Text(appLocalizations.developerMode),
               delegate: SwitchDelegate(
                 value: enable,
                 onChanged: (value) {
-                  ref.read(appSettingProvider.notifier).updateState(
-                        (state) => state.copyWith(
-                          developerMode: value,
-                        ),
+                  ref
+                      .read(appSettingProvider.notifier)
+                      .updateState(
+                        (state) => state.copyWith(developerMode: value),
                       );
                 },
               ),
             ),
           ),
-          SizedBox(
-            height: 16,
-          ),
-          _getDeveloperList(context, ref)
+          SizedBox(height: 16),
+          _getDeveloperList(context, ref),
         ],
       ),
     );
