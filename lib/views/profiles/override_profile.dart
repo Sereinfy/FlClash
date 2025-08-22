@@ -351,17 +351,17 @@ class RuleTitle extends ConsumerWidget {
     final isOverrideRule = vm3.c;
     return FilledButtonTheme(
       data: FilledButtonThemeData(
-        style: ButtonStyle(
-          padding: WidgetStatePropertyAll(EdgeInsets.symmetric(horizontal: 8)),
+        style: FilledButton.styleFrom(
+          padding: EdgeInsets.symmetric(horizontal: 8),
           visualDensity: VisualDensity.compact,
         ),
       ),
       child: IconButtonTheme(
         data: IconButtonThemeData(
-          style: ButtonStyle(
-            padding: WidgetStatePropertyAll(EdgeInsets.zero),
+          style: IconButton.styleFrom(
+            padding: EdgeInsets.zero,
             visualDensity: VisualDensity.compact,
-            iconSize: WidgetStatePropertyAll(20),
+            iconSize: 20,
           ),
         ),
         child: ListHeader(

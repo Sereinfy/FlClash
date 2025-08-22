@@ -89,10 +89,8 @@ class _RequestsViewState extends ConsumerState<RequestsView> {
         builder: (_, state, _) {
           return IconButton(
             style: state.autoScrollToEnd
-                ? ButtonStyle(
-                    backgroundColor: WidgetStatePropertyAll(
-                      context.colorScheme.secondaryContainer,
-                    ),
+                ? IconButton.styleFrom(
+                    backgroundColor: context.colorScheme.secondaryContainer,
                   )
                 : null,
             onPressed: () {

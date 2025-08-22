@@ -120,9 +120,7 @@ abstract class Log with _$Log {
     @JsonKey(fromJson: _logDateTime) required String dateTime,
   }) = _Log;
 
-  factory Log.app(
-    String payload,
-  ) {
+  factory Log.app(String payload) {
     return Log(
       payload: payload,
       dateTime: _logDateTime(null),
@@ -146,14 +144,12 @@ abstract class LogsState with _$LogsState {
 extension LogsStateExt on LogsState {
   List<Log> get list {
     final lowQuery = query.toLowerCase();
-    return logs.where(
-      (log) {
-        final logLevelName = log.logLevel.name;
-        return {logLevelName}.containsAll(keywords) &&
-            ((log.payload.toLowerCase().contains(lowQuery)) ||
-                logLevelName.contains(lowQuery));
-      },
-    ).toList();
+    return logs.where((log) {
+      final logLevelName = log.logLevel.name;
+      return {logLevelName}.containsAll(keywords) &&
+          ((log.payload.toLowerCase().contains(lowQuery)) ||
+              logLevelName.contains(lowQuery));
+    }).toList();
   }
 }
 
@@ -176,8 +172,8 @@ extension TrackerInfosStateExt on TrackerInfosState {
       final process = trackerInfo.metadata.process;
       final networkText = trackerInfo.metadata.network.toLowerCase();
       final hostText = trackerInfo.metadata.host.toLowerCase();
-      final destinationIPText =
-          trackerInfo.metadata.destinationIP.toLowerCase();
+      final destinationIPText = trackerInfo.metadata.destinationIP
+          .toLowerCase();
       final processText = trackerInfo.metadata.process.toLowerCase();
       final chainsText = chains.join('').toLowerCase();
       return {...chains, process}.containsAll(keywords) &&
@@ -206,10 +202,8 @@ abstract class DAV with _$DAV {
 
 @freezed
 abstract class FileInfo with _$FileInfo {
-  const factory FileInfo({
-    required int size,
-    required DateTime lastModified,
-  }) = _FileInfo;
+  const factory FileInfo({required int size, required DateTime lastModified}) =
+      _FileInfo;
 }
 
 extension FileInfoExt on FileInfo {
@@ -230,10 +224,7 @@ abstract class VersionInfo with _$VersionInfo {
 
 @freezed
 abstract class Traffic with _$Traffic {
-  const factory Traffic({
-    @Default(0) num up,
-    @Default(0) num down,
-  }) = _Traffic;
+  const factory Traffic({@Default(0) num up, @Default(0) num down}) = _Traffic;
 
   factory Traffic.fromJson(Map<String, Object?> json) =>
       _$TrafficFromJson(json);
@@ -253,10 +244,8 @@ extension TrafficExt on Traffic {
 
 @freezed
 abstract class TrafficShow with _$TrafficShow {
-  const factory TrafficShow({
-    required String value,
-    required String unit,
-  }) = _TrafficShow;
+  const factory TrafficShow({required String value, required String unit}) =
+      _TrafficShow;
 }
 
 extension TrafficShowExt on TrafficShow {
@@ -347,63 +336,39 @@ extension ColorSchemesExt on ColorSchemes {
 
 @freezed
 abstract class IpInfo with _$IpInfo {
-  const factory IpInfo({
-    required String ip,
-    required String countryCode,
-  }) = _IpInfo;
+  const factory IpInfo({required String ip, required String countryCode}) =
+      _IpInfo;
 
   static IpInfo fromIpInfoIoJson(Map<String, dynamic> json) {
     return switch (json) {
-      {
-        'ip': final String ip,
-        'country': final String country,
-      } =>
-        IpInfo(
-          ip: ip,
-          countryCode: country,
-        ),
+      {'ip': final String ip, 'country': final String country} => IpInfo(
+        ip: ip,
+        countryCode: country,
+      ),
       _ => throw const FormatException('invalid json'),
     };
   }
 
   static IpInfo fromIpApiCoJson(Map<String, dynamic> json) {
     return switch (json) {
-      {
-        'ip': final String ip,
-        'country_code': final String countryCode,
-      } =>
-        IpInfo(
-          ip: ip,
-          countryCode: countryCode,
-        ),
+      {'ip': final String ip, 'country_code': final String countryCode} =>
+        IpInfo(ip: ip, countryCode: countryCode),
       _ => throw const FormatException('invalid json'),
     };
   }
 
   static IpInfo fromIpSbJson(Map<String, dynamic> json) {
     return switch (json) {
-      {
-        'ip': final String ip,
-        'country_code': final String countryCode,
-      } =>
-        IpInfo(
-          ip: ip,
-          countryCode: countryCode,
-        ),
+      {'ip': final String ip, 'country_code': final String countryCode} =>
+        IpInfo(ip: ip, countryCode: countryCode),
       _ => throw const FormatException('invalid json'),
     };
   }
 
   static IpInfo fromIpwhoIsJson(Map<String, dynamic> json) {
     return switch (json) {
-      {
-        'ip': final String ip,
-        'country_code': final String countryCode,
-      } =>
-        IpInfo(
-          ip: ip,
-          countryCode: countryCode,
-        ),
+      {'ip': final String ip, 'country_code': final String countryCode} =>
+        IpInfo(ip: ip, countryCode: countryCode),
       _ => throw const FormatException('invalid json'),
     };
   }
@@ -432,21 +397,20 @@ abstract class Field with _$Field {
   }) = _Field;
 }
 
-enum PopupMenuItemType {
-  primary,
-  danger,
-}
+enum PopupMenuItemType { primary, danger }
 
 class PopupMenuItemData {
   const PopupMenuItemData({
     this.icon,
     required this.label,
     required this.onPressed,
+    this.danger = false,
   });
 
   final String label;
   final VoidCallback? onPressed;
   final IconData? icon;
+  final bool danger;
 }
 
 @freezed
@@ -473,17 +437,11 @@ abstract class Result<T> with _$Result<T> {
     required String message,
   }) = _Result;
 
-  factory Result.success(T data) => Result(
-        data: data,
-        type: ResultType.success,
-        message: '',
-      );
+  factory Result.success(T data) =>
+      Result(data: data, type: ResultType.success, message: '');
 
-  factory Result.error(String message) => Result(
-        data: null,
-        type: ResultType.error,
-        message: message,
-      );
+  factory Result.error(String message) =>
+      Result(data: null, type: ResultType.error, message: message);
 }
 
 extension ResultExt on Result {
@@ -500,15 +458,8 @@ abstract class Script with _$Script {
     required String content,
   }) = _Script;
 
-  factory Script.create({
-    required String label,
-    required String content,
-  }) {
-    return Script(
-      id: utils.uuidV4,
-      label: label,
-      content: content,
-    );
+  factory Script.create({required String label, required String content}) {
+    return Script(id: utils.uuidV4, label: label, content: content);
   }
 
   factory Script.fromJson(Map<String, Object?> json) => _$ScriptFromJson(json);

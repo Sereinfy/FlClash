@@ -42,6 +42,21 @@ class _DashboardViewState extends ConsumerState<DashboardView> {
 
   List<Widget> _buildActions() {
     return [
+      Consumer(
+        builder: (_, ref, _) {
+          final connected = ref.watch(connectedProvider);
+
+          return FilledButton(
+            onPressed: () {},
+            style: FilledButton.styleFrom(
+              padding: EdgeInsets.symmetric(horizontal: 12),
+              backgroundColor: Theme.of(context).colorScheme.error,
+              foregroundColor: Theme.of(context).colorScheme.onError,
+            ),
+            child: Text(connected ? '已连接' : '断开连接'),
+          );
+        },
+      ),
       _buildIsEdit((isEdit) {
         return isEdit
             ? ValueListenableBuilder(
@@ -63,7 +78,9 @@ class _DashboardViewState extends ConsumerState<DashboardView> {
       }),
       IconButton(
         icon: _buildIsEdit((isEdit) {
-          return isEdit ? Icon(Icons.save) : Icon(Icons.edit);
+          return isEdit
+              ? Icon(Icons.save)
+              : Icon(Icons.edit, fontWeight: FontWeight.w100);
         }),
         onPressed: _handleUpdateIsEdit,
       ),

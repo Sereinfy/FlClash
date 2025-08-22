@@ -176,6 +176,7 @@ class _GeoDataListItemState extends State<GeoDataListItem> {
                 ),
               ],
             ),
+            const SizedBox(height: 6),
           ],
         );
       },

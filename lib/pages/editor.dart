@@ -354,7 +354,7 @@ class FindPanel extends StatelessWidget implements PreferredSizeWidget {
         Expanded(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.end,
-            spacing: 8,
+            spacing: 6,
             children: [
               _buildIconButton(
                 onPressed: value.result == null
@@ -376,9 +376,7 @@ class FindPanel extends StatelessWidget implements PreferredSizeWidget {
               IconButton.filledTonal(
                 visualDensity: VisualDensity.compact,
                 onPressed: controller.close,
-                style: ButtonStyle(
-                  padding: WidgetStatePropertyAll(EdgeInsets.all(0)),
-                ),
+                style: IconButton.styleFrom(padding: EdgeInsets.zero),
                 icon: Icon(Icons.close, size: 16),
               ),
             ],
@@ -489,7 +487,7 @@ class FindPanel extends StatelessWidget implements PreferredSizeWidget {
     return IconButton(
       visualDensity: VisualDensity.compact,
       onPressed: onPressed,
-      style: ButtonStyle(padding: WidgetStatePropertyAll(EdgeInsets.all(0))),
+      style: IconButton.styleFrom(padding: EdgeInsets.all(0)),
       icon: Icon(icon, size: 16),
     );
   }

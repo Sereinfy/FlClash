@@ -291,13 +291,17 @@ class _PrimaryColorItemState extends ConsumerState<_PrimaryColorItem> {
         actions: genActions([
           if (_removablePrimaryColor == null)
             FilledButton(
-              style: ButtonStyle(visualDensity: VisualDensity.compact),
+              style: FilledButton.styleFrom(
+                visualDensity: VisualDensity.compact,
+              ),
               onPressed: _handleChangeSchemeVariant,
               child: Text(Intl.message('${schemeVariant.name}Scheme')),
             ),
           if (_removablePrimaryColor != null)
             FilledButton(
-              style: ButtonStyle(visualDensity: VisualDensity.compact),
+              style: FilledButton.styleFrom(
+                visualDensity: VisualDensity.compact,
+              ),
               onPressed: () {
                 setState(() {
                   _removablePrimaryColor = null;

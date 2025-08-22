@@ -112,9 +112,7 @@ class _ConnectionsViewState extends ConsumerState<ConnectionsView> {
                   trailing: IconButton(
                     padding: EdgeInsets.zero,
                     visualDensity: VisualDensity.compact,
-                    style: ButtonStyle(
-                      minimumSize: WidgetStatePropertyAll(Size.zero),
-                    ),
+                    style: IconButton.styleFrom(minimumSize: Size.zero),
                     icon: const Icon(Icons.block),
                     onPressed: () {
                       _handleBlockConnection(trackerInfo.id);

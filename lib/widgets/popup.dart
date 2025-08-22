@@ -212,11 +212,21 @@ class CommonPopupMenu extends StatelessWidget {
   }) {
     final onPressed = item.onPressed;
     final disabled = onPressed == null;
-    final color = disabled
-        ? context.colorScheme.onSurface.opacity30
+    final color = item.danger
+        ? context.colorScheme.onError
         : context.colorScheme.onSurface;
-    return InkWell(
-      onTap: onPressed != null
+    final foregroundColor = disabled ? color.opacity30 : color;
+    final backgroundColor = item.danger
+        ? context.colorScheme.error
+        : context.colorScheme.surfaceContainer;
+    return TextButton(
+      style: TextButton.styleFrom(
+        padding: EdgeInsets.zero,
+        shape: LinearBorder.none,
+        foregroundColor: foregroundColor,
+        backgroundColor: backgroundColor,
+      ),
+      onPressed: onPressed != null
           ? () {
               Navigator.of(context).pop();
               onPressed();
@@ -234,14 +244,14 @@ class CommonPopupMenu extends StatelessWidget {
           mainAxisSize: MainAxisSize.max,
           children: [
             if (item.icon != null) ...[
-              Icon(item.icon, size: fontSize + 4, color: color),
+              Icon(item.icon, size: fontSize + 4, color: foregroundColor),
               SizedBox(width: 16),
             ],
             Flexible(
               child: Text(
                 item.label,
                 style: context.textTheme.bodyMedium?.copyWith(
-                  color: color,
+                  color: foregroundColor,
                   fontSize: fontSize,
                 ),
               ),

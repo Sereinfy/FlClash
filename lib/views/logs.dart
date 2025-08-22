@@ -47,10 +47,9 @@ class _LogsViewState extends ConsumerState<LogsView> {
         builder: (_, state, _) {
           return IconButton(
             style: state.autoScrollToEnd
-                ? ButtonStyle(
-                    backgroundColor: WidgetStatePropertyAll(
-                      context.colorScheme.secondaryContainer,
-                    ),
+                ? IconButton.styleFrom(
+                    backgroundColor: context.colorScheme.secondaryContainer,
+                    foregroundColor: context.colorScheme.onSecondaryContainer,
                   )
                 : null,
             onPressed: () {
@@ -202,7 +201,7 @@ class LogItem extends StatelessWidget {
         24 +
         globalState.measure.labelMediumHeight +
         16 +
-        16;
+        20;
   }
 
   const LogItem({super.key, required this.log, this.onClick});
