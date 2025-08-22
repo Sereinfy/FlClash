@@ -58,6 +58,10 @@ data object Core {
         )
     }
 
+    external fun suspended(
+        suspended: Boolean,
+    )
+
     private external fun invokeAction(
         data: String,
         cb: InvokeInterface

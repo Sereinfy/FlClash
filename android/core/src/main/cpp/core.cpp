@@ -1,6 +1,7 @@
 #include <jni.h>
 
 #ifdef LIBCLASH
+
 #include "jni_helper.h"
 #include "libclash.h"
 #include "bride.h"
@@ -61,6 +62,12 @@ Java_com_follow_clash_core_Core_getTotalTraffic(JNIEnv *env, jobject thiz,
     return new_string(res);
 }
 
+extern "C"
+JNIEXPORT void JNICALL
+Java_com_follow_clash_core_Core_suspended(JNIEnv *env, jobject thiz, jboolean suspended) {
+    suspend(suspended);
+}
+
 
 static jmethodID m_tun_interface_protect;
 static jmethodID m_tun_interface_resolve_process;
@@ -85,12 +92,13 @@ call_tun_interface_resolve_process_impl(void *tun_interface, const int protocol,
                                         const char *target,
                                         const int uid) {
     ATTACH_JNI();
-    const auto packageName = reinterpret_cast<jstring>(env->CallObjectMethod(static_cast<jobject>(tun_interface),
-                                                                             m_tun_interface_resolve_process,
-                                                                             protocol,
-                                                                             new_string(source),
-                                                                             new_string(target),
-                                                                             uid));
+    const auto packageName = reinterpret_cast<jstring>(env->CallObjectMethod(
+            static_cast<jobject>(tun_interface),
+            m_tun_interface_resolve_process,
+            protocol,
+            new_string(source),
+            new_string(target),
+            uid));
     return get_string(packageName);
 }
 
@@ -170,5 +178,10 @@ extern "C"
 JNIEXPORT jstring JNICALL
 Java_com_follow_clash_core_Core_getTotalTraffic(JNIEnv *env, jobject thiz,
                                                 const jboolean only_statistics_proxy) {
+}
+
+extern "C"
+JNIEXPORT void JNICALL
+Java_com_follow_clash_core_Core_suspended(JNIEnv *env, jobject thiz, jboolean suspended) {
 }
 #endif

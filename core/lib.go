@@ -238,9 +238,9 @@ func stopTun() {
 	handleStopTun()
 }
 
-//export suspended
-func suspended(suspended bool) {
-	handleSuspended(suspended)
+//export suspend
+func suspend(suspended bool) {
+	handleSuspend(suspended)
 }
 
 //export forceGC
