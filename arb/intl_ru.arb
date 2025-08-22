@@ -422,5 +422,7 @@
   "proxyChains": "Цепочки прокси",
   "log": "Журнал",
   "connection": "Соединение",
-  "request": "Запрос"
+  "request": "Запрос",
+  "connected": "Подключено",
+  "disconnected": "Отключено"
 }

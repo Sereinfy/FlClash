@@ -422,5 +422,7 @@
   "proxyChains": "代理链",
   "log": "日志",
   "connection": "连接",
-  "request": "请求"
+  "request": "请求",
+  "connected": "已连接",
+  "disconnected": "已断开"
 }

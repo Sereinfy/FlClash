@@ -422,5 +422,7 @@
   "proxyChains": "プロキシチェーン",
   "log": "ログ",
   "connection": "接続",
-  "request": "リクエスト"
+  "request": "リクエスト",
+  "connected": "接続済み",
+  "disconnected": "切断済み"
 }

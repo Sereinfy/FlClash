@@ -421,5 +421,7 @@
   "proxyChains": "Proxy chains",
   "log": "Log",
   "connection": "Connection",
-  "request": "Request"
+  "request": "Request",
+  "connected": "Connected",
+  "disconnected": "Disconnected"
 }

@@ -4,6 +4,7 @@ import 'package:defer_pointer/defer_pointer.dart';
 import 'package:fl_clash/common/common.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/providers/providers.dart';
+import 'package:fl_clash/state.dart';
 import 'package:fl_clash/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -40,50 +41,60 @@ class _DashboardViewState extends ConsumerState<DashboardView> {
     );
   }
 
-  List<Widget> _buildActions() {
+  List<Widget> _buildActions(bool isEdit) {
     return [
-      Consumer(
-        builder: (_, ref, _) {
-          final connected = ref.watch(connectedProvider);
-
-          return FilledButton(
-            onPressed: () {},
-            style: FilledButton.styleFrom(
-              padding: EdgeInsets.symmetric(horizontal: 12),
-              backgroundColor: Theme.of(context).colorScheme.error,
-              foregroundColor: Theme.of(context).colorScheme.onError,
-            ),
-            child: Text(connected ? '已连接' : '断开连接'),
-          );
-        },
-      ),
-      _buildIsEdit((isEdit) {
-        return isEdit
-            ? ValueListenableBuilder(
-                valueListenable: _addedWidgetsNotifier,
-                builder: (_, addedChildren, child) {
-                  if (addedChildren.isEmpty) {
-                    return Container();
-                  }
-                  return child!;
-                },
-                child: IconButton(
-                  onPressed: () {
-                    _showAddWidgetsModal();
-                  },
-                  icon: Icon(Icons.add_circle),
-                ),
-              )
-            : SizedBox();
-      }),
-      IconButton(
-        icon: _buildIsEdit((isEdit) {
-          return isEdit
-              ? Icon(Icons.save)
-              : Icon(Icons.edit, fontWeight: FontWeight.w100);
-        }),
-        onPressed: _handleUpdateIsEdit,
-      ),
+      if (!isEdit)
+        Consumer(
+          builder: (_, ref, _) {
+            final isInit = ref.watch(initProvider);
+            final connected = ref.watch(connectedProvider);
+            return FadeThroughBox(
+              child: isInit
+                  ? FilledButton.icon(
+                      onPressed: () {
+                        if (!connected) {
+                          globalState.appController.restartCore();
+                        }
+                      },
+                      style: FilledButton.styleFrom(
+                        padding: EdgeInsets.symmetric(horizontal: 12),
+                        backgroundColor: !connected
+                            ? Theme.of(context).colorScheme.error
+                            : null,
+                        foregroundColor: !connected
+                            ? Theme.of(context).colorScheme.onError
+                            : null,
+                      ),
+                      icon: connected ? null : Icon(Icons.restart_alt),
+                      label: Text(
+                        connected
+                            ? appLocalizations.connected
+                            : appLocalizations.disconnected,
+                      ),
+                    )
+                  : SizedBox(),
+            );
+          },
+        ),
+      if (isEdit)
+        ValueListenableBuilder(
+          valueListenable: _addedWidgetsNotifier,
+          builder: (_, addedChildren, child) {
+            if (addedChildren.isEmpty) {
+              return Container();
+            }
+            return child!;
+          },
+          child: IconButton(
+            onPressed: () {
+              _showAddWidgetsModal();
+            },
+            icon: Icon(Icons.add_circle),
+          ),
+        ),
+      isEdit
+          ? IconButton(icon: Icon(Icons.save), onPressed: _handleUpdateIsEdit)
+          : IconButton(icon: Icon(Icons.edit), onPressed: _handleUpdateIsEdit),
     ];
   }
 
@@ -156,16 +167,16 @@ class _DashboardViewState extends ConsumerState<DashboardView> {
           .map((item) => item.widget)
           .toList();
     });
-    return CommonScaffold(
-      title: appLocalizations.dashboard,
-      actions: _buildActions(),
-      floatingActionButton: const StartButton(),
-      body: Align(
-        alignment: Alignment.topCenter,
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(16).copyWith(bottom: 88),
-          child: _buildIsEdit((isEdit) {
-            return isEdit
+    return _buildIsEdit(
+      (isEdit) => CommonScaffold(
+        title: appLocalizations.dashboard,
+        actions: _buildActions(isEdit),
+        floatingActionButton: const StartButton(),
+        body: Align(
+          alignment: Alignment.topCenter,
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(16).copyWith(bottom: 88),
+            child: isEdit
                 ? SystemBackBlock(
                     child: CommonPopScope(
                       child: SuperGrid(
@@ -197,8 +208,8 @@ class _DashboardViewState extends ConsumerState<DashboardView> {
                     crossAxisSpacing: spacing,
                     mainAxisSpacing: spacing,
                     children: children,
-                  );
-          }),
+                  ),
+          ),
         ),
       ),
     );
