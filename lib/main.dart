@@ -28,8 +28,8 @@ Future<void> _service(List<String> flags) async {
   await service?.init();
   tile?.addListener(
     _TileListenerWithService(
-      onStop: () {
-        app?.tip(appLocalizations.stopVpn);
+      onStop: () async {
+        await app?.tip(appLocalizations.stopVpn);
         globalState.handleStop();
       },
     ),

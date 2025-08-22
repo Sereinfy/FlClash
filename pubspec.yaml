@@ -15,7 +15,7 @@ dependencies:
   path: ^1.9.0
   shared_preferences: ^2.5.3
   window_manager: ^0.5.0
-  dynamic_color: ^1.7.0
+  dynamic_color: ^1.8.1
   proxy:
     path: plugins/proxy
   window_ext:
