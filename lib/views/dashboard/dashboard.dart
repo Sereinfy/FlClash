@@ -76,10 +76,8 @@ class _DashboardViewState extends ConsumerState<DashboardView> {
                       child: CircularProgressIndicator(
                         key: ValueKey(CoreStatus.connecting),
                         strokeWidth: 3,
-                        color: context.colorScheme.tertiary,
-                        backgroundColor: context.colorScheme.tertiary.lighten(
-                          10,
-                        ),
+                        color: context.colorScheme.onPrimary,
+                        backgroundColor: Colors.transparent,
                       ),
                     ),
                     CoreStatus.connected => Icon(
