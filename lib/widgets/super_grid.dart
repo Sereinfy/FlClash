@@ -56,7 +56,10 @@ class SuperGridState extends State<SuperGrid> with TickerProviderStateMixin {
 
   late AnimationController _transformController;
 
-  Completer? _transformCompleter;
+  Future<bool> get isTransformCompleter =>
+      _transformCompleter?.future ?? Future(() => true);
+
+  Completer<bool>? _transformCompleter;
 
   Map<int, Animation<Offset>> _transformAnimationMap = {};
 
@@ -270,10 +273,9 @@ class SuperGridState extends State<SuperGrid> with TickerProviderStateMixin {
     ).animate(_fakeDragWidgetController);
     _animating.value = true;
 
-    _transformCompleter = Completer();
-    final animateWith = _fakeDragWidgetController.animateWith(simulation);
-    _transformCompleter?.complete(animateWith);
-    await animateWith;
+    _transformCompleter = Completer<bool>();
+    await _fakeDragWidgetController.animateWith(simulation);
+    _transformCompleter?.complete(true);
     _animating.value = false;
     _fakeDragWidgetAnimation = null;
     _transformTweenMap.clear();

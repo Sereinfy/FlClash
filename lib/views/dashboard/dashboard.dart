@@ -154,20 +154,21 @@ class _DashboardViewState extends ConsumerState<DashboardView> {
     );
   }
 
-  void _handleUpdateIsEdit() {
+  Future<void> _handleUpdateIsEdit() async {
     if (_isEditNotifier.value == true) {
-      _handleSave();
+      await _handleSave();
     }
     _isEditNotifier.value = !_isEditNotifier.value;
   }
 
-  void _handleSave() {
-    final children = key.currentState?.children;
-    if (children == null) {
+  Future<void> _handleSave() async {
+    final currentState = key.currentState;
+    if (currentState == null) {
       return;
     }
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      final dashboardWidgets = children
+    if (mounted) {
+      await currentState.isTransformCompleter;
+      final dashboardWidgets = currentState.children
           .map((item) => DashboardWidget.getDashboardWidget(item))
           .toList();
       ref
@@ -175,7 +176,7 @@ class _DashboardViewState extends ConsumerState<DashboardView> {
           .updateState(
             (state) => state.copyWith(dashboardWidgets: dashboardWidgets),
           );
-    });
+    }
   }
 
   @override
