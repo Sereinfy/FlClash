@@ -3,7 +3,7 @@ package com.follow.clash
 import android.app.Activity
 import android.os.Bundle
 import com.follow.clash.common.QuickAction
-import com.follow.clash.common.value
+import com.follow.clash.common.action
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -14,19 +14,19 @@ class TempActivity : Activity(),
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         when (intent.action) {
-            QuickAction.START.value -> {
+            QuickAction.START.action -> {
                 launch {
                     State.handleStartServiceAction()
                 }
             }
 
-            QuickAction.STOP.value -> {
+            QuickAction.STOP.action -> {
                 launch {
                     State.handleStopServiceAction()
                 }
             }
 
-            QuickAction.TOGGLE.value -> {
+            QuickAction.TOGGLE.action -> {
                 launch {
                     State.handleToggleAction()
                 }

@@ -42,25 +42,21 @@ fun Service.startForegroundCompat(id: Int, notification: Notification) {
     }
 }
 
-val QuickAction.value: String
-    get() = "${GlobalState.application.packageName}.action.${this@value.name}"
-
-val BroadcastAction.value: String
-    get() = "${GlobalState.application.packageName}.action.${this@value.name}"
-
+val Enum<*>.action: String
+    get() = "${GlobalState.application.packageName}.action.${this.name}"
 
 val QuickAction.quickIntent: Intent
     get() = Intent().apply {
         Log.d("[quickIntent]", Components.TEMP_ACTIVITY.toString())
         setComponent(Components.TEMP_ACTIVITY)
         setPackage(GlobalState.packageName)
-        action = this@quickIntent.value
+        action = this@quickIntent.action
         addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_MULTIPLE_TASK)
     }
 
 fun BroadcastAction.sendBroadcast() {
     val intent = Intent().apply {
-        action = this@sendBroadcast.value
+        action = this@sendBroadcast.action
         Log.d("[sendBroadcast]", "$action")
         setPackage(GlobalState.packageName)
     }
