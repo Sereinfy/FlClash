@@ -395,3 +395,5 @@ enum ImportOption { file, url }
 enum ScrollPositionCacheKey { tools, profiles, proxiesList, proxiesTabList }
 
 enum QueryTag { proxies }
+
+enum CoreStatus { connecting, connected, disconnected }

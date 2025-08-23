@@ -537,7 +537,7 @@ class AppController {
     await _handlePreference();
     await _handlerDisclaimer();
     _ref.read(initProvider.notifier).value = true;
-    _ref.read(connectedProvider.notifier).value = true;
+    _ref.read(coreStatusProvider.notifier).value = CoreStatus.connected;
   }
 
   Future<void> _initStatus() async {
@@ -765,7 +765,7 @@ class AppController {
   }
 
   void handleCoreDisconnected() {
-    _ref.read(connectedProvider.notifier).value = false;
+    _ref.read(coreStatusProvider.notifier).value = CoreStatus.disconnected;
   }
 
   Future<List<Package>> getPackages() async {

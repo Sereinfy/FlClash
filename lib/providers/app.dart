@@ -379,16 +379,16 @@ class ProfileOverrideState extends _$ProfileOverrideState
   }
 }
 
-@riverpod
-class Connected extends _$Connected with AutoDisposeNotifierMixin {
+@Riverpod(name: 'coreStatusProvider')
+class _CoreStatus extends _$CoreStatus with AutoDisposeNotifierMixin {
   @override
-  bool build() {
-    return globalState.appState.isConnected;
+  CoreStatus build() {
+    return globalState.appState.coreStatus;
   }
 
   @override
   onUpdate(value) {
-    globalState.appState = globalState.appState.copyWith(isConnected: value);
+    globalState.appState = globalState.appState.copyWith(coreStatus: value);
   }
 }
 

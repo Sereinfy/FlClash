@@ -47,7 +47,8 @@ class _DashboardViewState extends ConsumerState<DashboardView> {
         Consumer(
           builder: (_, ref, _) {
             final isInit = ref.watch(initProvider);
-            final connected = ref.watch(connectedProvider);
+            final connected =
+                ref.watch(coreStatusProvider) == CoreStatus.connected;
             return FadeThroughBox(
               child: isInit
                   ? FilledButton.icon(
