@@ -75,17 +75,19 @@ class _DashboardViewState extends ConsumerState<DashboardView> {
                       padding: EdgeInsets.all(2),
                       child: CircularProgressIndicator(
                         key: ValueKey(CoreStatus.connecting),
-                        strokeWidth: 2,
-                        color: context.colorScheme.onPrimaryFixedVariant,
+                        strokeWidth: 3,
+                        color: context.colorScheme.onPrimaryContainer,
                         backgroundColor: context.colorScheme.primaryContainer,
                       ),
                     ),
                     CoreStatus.connected => Icon(
-                      Icons.check_outlined,
+                      Icons.check_sharp,
+                      fontWeight: FontWeight.w900,
                       key: ValueKey(CoreStatus.connected),
                     ),
                     CoreStatus.disconnected => Icon(
-                      Icons.restart_alt,
+                      Icons.restart_alt_sharp,
+                      fontWeight: FontWeight.w900,
                       key: ValueKey(CoreStatus.disconnected),
                     ),
                   },

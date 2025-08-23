@@ -20,7 +20,7 @@ class DeveloperView extends ConsumerWidget {
         ListItem(
           title: Text(appLocalizations.messageTest),
           onTap: () {
-            context.showNotifier('${appLocalizations.messageTestTip}');
+            context.showNotifier(appLocalizations.messageTestTip);
           },
         ),
         ListItem(
