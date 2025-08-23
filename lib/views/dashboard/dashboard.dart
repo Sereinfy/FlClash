@@ -47,7 +47,6 @@ class _DashboardViewState extends ConsumerState<DashboardView> {
         Consumer(
           builder: (_, ref, _) {
             final coreStatus = ref.watch(coreStatusProvider);
-            final disconnected = coreStatus == CoreStatus.disconnected;
             return FilledButton.icon(
               onPressed: () {
                 // if (!connected) {

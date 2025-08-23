@@ -82,7 +82,7 @@ class FadeRotationScaleBox extends StatelessWidget {
         return RotationTransition(
           turns: animation.drive(Tween(begin: 0.8, end: 1.0)),
           child: FadeTransition(
-            opacity: animation,
+            opacity: animation.drive(Tween(begin: 0.4, end: 1.0)),
             child: ScaleTransition(scale: animation, child: child),
           ),
         );
