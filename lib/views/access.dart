@@ -68,31 +68,38 @@ class _AccessViewState extends ConsumerState<AccessView> {
     required bool isSelectedAll,
     required List<String> allValueList,
   }) {
-    final tooltip = isSelectedAll
-        ? appLocalizations.cancelSelectAll
-        : appLocalizations.selectAll;
-    return IconButton(
-      tooltip: tooltip,
-      onPressed: () {
-        ref.read(vpnSettingProvider.notifier).updateState((state) {
-          final isAccept =
-              state.accessControl.mode == AccessControlMode.acceptSelected;
-          if (isSelectedAll) {
-            return switch (isAccept) {
-              true => state.copyWith.accessControl(acceptList: []),
-              false => state.copyWith.accessControl(rejectList: []),
-            };
-          } else {
-            return switch (isAccept) {
-              true => state.copyWith.accessControl(acceptList: allValueList),
-              false => state.copyWith.accessControl(rejectList: allValueList),
-            };
-          }
-        });
-      },
-      icon: isSelectedAll
-          ? const Icon(Icons.deselect)
-          : const Icon(Icons.select_all),
+    onPressed() {
+      ref.read(vpnSettingProvider.notifier).updateState((state) {
+        final isAccept =
+            state.accessControl.mode == AccessControlMode.acceptSelected;
+        if (isSelectedAll) {
+          return switch (isAccept) {
+            true => state.copyWith.accessControl(acceptList: []),
+            false => state.copyWith.accessControl(rejectList: []),
+          };
+        } else {
+          return switch (isAccept) {
+            true => state.copyWith.accessControl(acceptList: allValueList),
+            false => state.copyWith.accessControl(rejectList: allValueList),
+          };
+        }
+      });
+    }
+
+    return FadeRotationScaleBox(
+      child: isSelectedAll
+          ? IconButton(
+              key: ValueKey(true),
+              tooltip: appLocalizations.cancelSelectAll,
+              onPressed: onPressed,
+              icon: const Icon(Icons.deselect),
+            )
+          : IconButton(
+              key: ValueKey(false),
+              tooltip: appLocalizations.selectAll,
+              onPressed: onPressed,
+              icon: const Icon(Icons.select_all),
+            ),
     );
   }
 
