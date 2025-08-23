@@ -56,12 +56,16 @@ class _DashboardViewState extends ConsumerState<DashboardView> {
               },
               style: FilledButton.styleFrom(
                 padding: EdgeInsets.symmetric(horizontal: 12),
-                backgroundColor: disconnected
-                    ? Theme.of(context).colorScheme.error
-                    : null,
-                foregroundColor: disconnected
-                    ? Theme.of(context).colorScheme.onError
-                    : null,
+                backgroundColor: switch (coreStatus) {
+                  CoreStatus.connecting => null,
+                  CoreStatus.connected => Colors.greenAccent,
+                  CoreStatus.disconnected => context.colorScheme.error,
+                },
+                foregroundColor: switch (coreStatus) {
+                  CoreStatus.connecting => null,
+                  CoreStatus.connected => context.colorScheme.onPrimary,
+                  CoreStatus.disconnected => context.colorScheme.onError,
+                },
               ),
               icon: SizedBox(
                 height: globalState.measure.bodyMediumHeight,
