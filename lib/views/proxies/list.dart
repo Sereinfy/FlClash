@@ -45,6 +45,13 @@ class _ProxiesListViewState extends State<ProxiesListView> {
     final index = _headerOffset.findInterval(initOffset);
     final currentIndex = index;
     double headerOffset = 0.0;
+    if (index + 1 <= _headerOffset.length - 1) {
+      final endOffset = _headerOffset[index + 1];
+      final startOffset = endOffset - listHeaderHeight - 8;
+      if (initOffset > startOffset && initOffset < endOffset) {
+        headerOffset = initOffset - startOffset;
+      }
+    }
     return ProxiesListHeaderSelectorState(
       offset: max(headerOffset, 0),
       currentIndex: currentIndex,
@@ -52,7 +59,7 @@ class _ProxiesListViewState extends State<ProxiesListView> {
   }
 
   void _adjustHeader() {
-    print(!_controller.hasClients ? 0 : _controller.offset);
+    // print(!_controller.hasClients ? 0 : _controller.offset);
     _headerStateNotifier.value = _getProxiesListHeaderSelectorState(
       !_controller.hasClients ? 0 : _controller.offset,
     );
