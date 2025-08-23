@@ -70,51 +70,54 @@ class MessageManagerState extends State<MessageManager> {
         ValueListenableBuilder(
           valueListenable: _messagesNotifier,
           builder: (_, messages, _) {
-            return FadeThroughBox(
+            return Container(
               margin: EdgeInsets.only(
-                top: kToolbarHeight + 8,
+                top: kToolbarHeight + 12,
                 left: 12,
                 right: 12,
               ),
-              alignment: Alignment.topRight,
-              child: messages.isEmpty
-                  ? SizedBox()
-                  : LayoutBuilder(
-                      key: Key(messages.last.id),
-                      builder: (_, constraints) {
-                        return Card(
-                          shape: const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(12.0),
+              child: FadeThroughBox(
+                alignment: Alignment.topRight,
+                child: messages.isEmpty
+                    ? SizedBox()
+                    : LayoutBuilder(
+                        key: Key(messages.last.id),
+                        builder: (_, constraints) {
+                          return Card(
+                            shape: const RoundedRectangleBorder(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(12.0),
+                              ),
                             ),
-                          ),
-                          elevation: 10,
-                          color: context.colorScheme.surfaceContainerHigh,
-                          child: Container(
-                            width: min(constraints.maxWidth, 500),
-                            padding: EdgeInsets.symmetric(
-                              horizontal: 12,
-                              vertical: 10,
+                            elevation: 10,
+                            color: context.colorScheme.surfaceContainerHigh,
+                            child: Container(
+                              width: min(constraints.maxWidth, 500),
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 12,
+                                vertical: 10,
+                              ),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Flexible(child: Text(messages.last.text)),
+                                  IconButton(
+                                    visualDensity: VisualDensity.compact,
+                                    iconSize: 18,
+                                    padding: EdgeInsets.zero,
+                                    onPressed: () {
+                                      _handleRemove(messages.last);
+                                    },
+                                    icon: Icon(Icons.close),
+                                  ),
+                                ],
+                              ),
                             ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Flexible(child: Text(messages.last.text)),
-                                IconButton(
-                                  visualDensity: VisualDensity.compact,
-                                  iconSize: 18,
-                                  padding: EdgeInsets.zero,
-                                  onPressed: () {
-                                    _handleRemove(messages.last);
-                                  },
-                                  icon: Icon(Icons.close),
-                                ),
-                              ],
-                            ),
-                          ),
-                        );
-                      },
-                    ),
+                          );
+                        },
+                      ),
+              ),
             );
           },
         ),

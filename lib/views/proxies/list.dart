@@ -59,7 +59,6 @@ class _ProxiesListViewState extends State<ProxiesListView> {
   }
 
   void _adjustHeader() {
-    // print(!_controller.hasClients ? 0 : _controller.offset);
     _headerStateNotifier.value = _getProxiesListHeaderSelectorState(
       !_controller.hasClients ? 0 : _controller.offset,
     );
@@ -282,7 +281,6 @@ class _ProxiesListViewState extends State<ProxiesListView> {
                       if (index < 0 || state.groups.isEmpty) {
                         return Container();
                       }
-                      print(headerState.offset);
                       return Stack(
                         children: [
                           Positioned(

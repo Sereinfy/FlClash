@@ -271,6 +271,7 @@ class _EditProfileViewState extends State<EditProfileView> {
         valueListenable: fileInfoNotifier,
         builder: (_, fileInfo, _) {
           return FadeThroughBox(
+            alignment: Alignment.centerLeft,
             child: fileInfo == null
                 ? Container()
                 : ListItem(

@@ -46,34 +46,53 @@ class _DashboardViewState extends ConsumerState<DashboardView> {
       if (!isEdit)
         Consumer(
           builder: (_, ref, _) {
-            final isInit = ref.watch(initProvider);
-            final connected =
-                ref.watch(coreStatusProvider) == CoreStatus.connected;
-            return FadeThroughBox(
-              child: isInit
-                  ? FilledButton.icon(
-                      onPressed: () {
-                        if (!connected) {
-                          globalState.appController.restartCore();
-                        }
-                      },
-                      style: FilledButton.styleFrom(
-                        padding: EdgeInsets.symmetric(horizontal: 12),
-                        backgroundColor: !connected
-                            ? Theme.of(context).colorScheme.error
-                            : null,
-                        foregroundColor: !connected
-                            ? Theme.of(context).colorScheme.onError
-                            : null,
+            final coreStatus = ref.watch(coreStatusProvider);
+            final disconnected = coreStatus == CoreStatus.disconnected;
+            return FilledButton.icon(
+              onPressed: () {
+                // if (!connected) {
+                //   globalState.appController.restartCore();
+                // }
+              },
+              style: FilledButton.styleFrom(
+                padding: EdgeInsets.symmetric(horizontal: 12),
+                backgroundColor: disconnected
+                    ? Theme.of(context).colorScheme.error
+                    : null,
+                foregroundColor: disconnected
+                    ? Theme.of(context).colorScheme.onError
+                    : null,
+              ),
+              icon: SizedBox(
+                height: globalState.measure.bodyMediumHeight,
+                width: globalState.measure.bodyMediumHeight,
+                child: FadeRotationScaleBox(
+                  child: switch (coreStatus) {
+                    CoreStatus.connecting => Padding(
+                      padding: EdgeInsets.all(2),
+                      child: CircularProgressIndicator(
+                        key: ValueKey(CoreStatus.connecting),
+                        strokeWidth: 2,
+                        color: context.colorScheme.onPrimaryFixedVariant,
+                        backgroundColor: context.colorScheme.primaryContainer,
                       ),
-                      icon: connected ? null : Icon(Icons.restart_alt),
-                      label: Text(
-                        connected
-                            ? appLocalizations.connected
-                            : appLocalizations.disconnected,
-                      ),
-                    )
-                  : SizedBox(),
+                    ),
+                    CoreStatus.connected => Icon(
+                      Icons.check_outlined,
+                      key: ValueKey(CoreStatus.connected),
+                    ),
+                    CoreStatus.disconnected => Icon(
+                      Icons.restart_alt,
+                      key: ValueKey(CoreStatus.disconnected),
+                    ),
+                  },
+                ),
+              ),
+              label: Text(switch (coreStatus) {
+                CoreStatus.connecting => '连接中',
+                CoreStatus.connected => appLocalizations.connected,
+                CoreStatus.disconnected => appLocalizations.disconnected,
+              }),
             );
           },
         ),
@@ -93,9 +112,19 @@ class _DashboardViewState extends ConsumerState<DashboardView> {
             icon: Icon(Icons.add_circle),
           ),
         ),
-      isEdit
-          ? IconButton(icon: Icon(Icons.save), onPressed: _handleUpdateIsEdit)
-          : IconButton(icon: Icon(Icons.edit), onPressed: _handleUpdateIsEdit),
+      FadeRotationScaleBox(
+        child: isEdit
+            ? IconButton(
+                key: ValueKey(true),
+                icon: Icon(Icons.save, key: ValueKey('save-icon')),
+                onPressed: _handleUpdateIsEdit,
+              )
+            : IconButton(
+                key: ValueKey(false),
+                icon: Icon(Icons.edit, key: ValueKey('edit-icon')),
+                onPressed: _handleUpdateIsEdit,
+              ),
+      ),
     ];
   }
 

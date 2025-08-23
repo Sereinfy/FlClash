@@ -38,29 +38,31 @@ class ProxyCard extends StatelessWidget {
           final delay = ref.watch(
             getDelayProvider(proxyName: proxy.name, testUrl: testUrl),
           );
-          return delay == 0 || delay == null
-              ? SizedBox(
-                  height: measure.labelSmallHeight,
-                  width: measure.labelSmallHeight,
-                  child: delay == 0
-                      ? const CircularProgressIndicator(strokeWidth: 2)
-                      : IconButton(
-                          icon: const Icon(Icons.bolt),
-                          iconSize: globalState.measure.labelSmallHeight,
-                          padding: EdgeInsets.zero,
-                          onPressed: _handleTestCurrentDelay,
-                        ),
-                )
-              : GestureDetector(
-                  onTap: _handleTestCurrentDelay,
-                  child: Text(
-                    delay > 0 ? '$delay ms' : 'Timeout',
-                    style: context.textTheme.labelSmall?.copyWith(
-                      overflow: TextOverflow.ellipsis,
-                      color: utils.getDelayColor(delay),
+          return FadeThroughBox(
+            child: delay == 0 || delay == null
+                ? SizedBox(
+                    height: measure.labelSmallHeight,
+                    width: measure.labelSmallHeight,
+                    child: delay == 0
+                        ? const CircularProgressIndicator(strokeWidth: 2)
+                        : IconButton(
+                            icon: const Icon(Icons.bolt),
+                            iconSize: globalState.measure.labelSmallHeight,
+                            padding: EdgeInsets.zero,
+                            onPressed: _handleTestCurrentDelay,
+                          ),
+                  )
+                : GestureDetector(
+                    onTap: _handleTestCurrentDelay,
+                    child: Text(
+                      delay > 0 ? '$delay ms' : 'Timeout',
+                      style: context.textTheme.labelSmall?.copyWith(
+                        overflow: TextOverflow.ellipsis,
+                        color: utils.getDelayColor(delay),
+                      ),
                     ),
                   ),
-                );
+          );
         },
       ),
     );

@@ -115,25 +115,23 @@ class _NetworkDetectionState extends ConsumerState<NetworkDetection> {
                                 overflow: TextOverflow.ellipsis,
                               ),
                             )
-                          : FadeThroughBox(
-                              child: isLoading == false && ipInfo == null
-                                  ? Text(
-                                      'timeout',
-                                      style: context.textTheme.bodyMedium
-                                          ?.copyWith(color: Colors.red)
-                                          .adjustSize(1),
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                    )
-                                  : Container(
-                                      padding: const EdgeInsets.all(2),
-                                      child: const AspectRatio(
-                                        aspectRatio: 1,
-                                        child: CircularProgressIndicator(
-                                          strokeWidth: 2,
-                                        ),
-                                      ),
-                                    ),
+                          : isLoading == false && ipInfo == null
+                          ? Text(
+                              'timeout',
+                              style: context.textTheme.bodyMedium
+                                  ?.copyWith(color: Colors.red)
+                                  .adjustSize(1),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            )
+                          : Container(
+                              padding: const EdgeInsets.all(2),
+                              child: const AspectRatio(
+                                aspectRatio: 1,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                ),
+                              ),
                             ),
                     ),
                   ),
