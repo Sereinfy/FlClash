@@ -73,15 +73,19 @@ class BackupAndRecovery extends ConsumerWidget {
   }
 
   Future<void> _backupOnLocal(BuildContext context) async {
-    final res = await globalState.appController.safeRun<bool>(() async {
-      final backupData = await globalState.appController.backupData();
-      final value = await picker.saveFile(
-        utils.getBackupFileName(),
-        Uint8List.fromList(backupData),
-      );
-      if (value == null) return false;
-      return true;
-    }, title: appLocalizations.backup);
+    final res = await globalState.appController.safeRun<bool>(
+      () async {
+        final backupData = await globalState.appController.backupData();
+        final value = await picker.saveFile(
+          utils.getBackupFileName(),
+          Uint8List.fromList(backupData),
+        );
+        if (value == null) return false;
+        return true;
+      },
+      title: appLocalizations.backup,
+      needLoading: true,
+    );
     if (res != true) return;
     globalState.showMessage(
       title: appLocalizations.backup,
