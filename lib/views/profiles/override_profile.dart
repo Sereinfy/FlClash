@@ -372,13 +372,22 @@ class RuleTitle extends ConsumerWidget {
           space: 8,
           actions: [
             if (!isEdit)
-              IconButton.filledTonal(
-                icon: Icon(
-                  isOverrideRule ? Icons.edit_document : Icons.note_add,
-                ),
-                onPressed: () {
-                  _handleChangeType(ref, isOverrideRule);
-                },
+              FadeRotationScaleBox(
+                child: isOverrideRule
+                    ? IconButton.filledTonal(
+                        key: ValueKey(true),
+                        icon: Icon(Icons.edit_document),
+                        onPressed: () {
+                          _handleChangeType(ref, true);
+                        },
+                      )
+                    : IconButton.filledTonal(
+                        key: ValueKey(false),
+                        icon: Icon(Icons.note_add),
+                        onPressed: () {
+                          _handleChangeType(ref, false);
+                        },
+                      ),
               ),
             !isEdit
                 ? FilledButton.tonal(
