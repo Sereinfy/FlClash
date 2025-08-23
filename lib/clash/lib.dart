@@ -14,6 +14,7 @@ class ClashLib extends ClashHandlerInterface {
 
   @override
   preload() async {
+    await service?.init();
     return true;
   }
 
@@ -42,14 +43,8 @@ class ClashLib extends ClashHandlerInterface {
   }) async {
     final id = '${method.name}#${utils.id}';
     final result = await service
-        ?.invokeAction(Action(
-          id: id,
-          method: method,
-          data: data,
-        ))
-        .withTimeout(
-          onTimeout: () => null,
-        );
+        ?.invokeAction(Action(id: id, method: method, data: data))
+        .withTimeout(onTimeout: () => null);
     if (result == null) {
       return null;
     }

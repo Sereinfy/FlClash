@@ -537,7 +537,6 @@ class AppController {
     await _handlePreference();
     await _handlerDisclaimer();
     _ref.read(initProvider.notifier).value = true;
-    _ref.read(coreStatusProvider.notifier).value = CoreStatus.connected;
   }
 
   Future<void> _initStatus() async {

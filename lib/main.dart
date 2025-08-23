@@ -15,7 +15,6 @@ import 'common/common.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final version = await system.version;
-  await clashCore.preload();
   await globalState.initApp(version);
   HttpOverrides.global = FlClashHttpOverrides();
   runApp(ProviderScope(child: const Application()));
