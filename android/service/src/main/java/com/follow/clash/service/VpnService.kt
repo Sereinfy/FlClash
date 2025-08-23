@@ -40,11 +40,10 @@ class VpnService : SystemVpnService(), IBaseService,
         install(SuspendModule(self))
     }
 
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+    override fun onCreate() {
+        super.onCreate()
         handleCreate()
-        return super.onStartCommand(intent, flags, startId)
     }
-
     private val connectivity by lazy {
         getSystemService<ConnectivityManager>()
     }
