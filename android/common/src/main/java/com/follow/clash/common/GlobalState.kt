@@ -11,6 +11,15 @@ object GlobalState : CoroutineScope by CoroutineScope(Dispatchers.Default) {
 
     const val NOTIFICATION_ID = 1
 
+    val packageName: String
+        get() = _application.packageName
+
+    val RECEIVE_BROADCASTS_PERMISSIONS: String
+        get() = "${packageName}.permission.RECEIVE_BROADCASTS"
+
+
+    private lateinit var _application: Application
+
     val application: Application
         get() = _application
 
@@ -18,8 +27,6 @@ object GlobalState : CoroutineScope by CoroutineScope(Dispatchers.Default) {
     fun log(text: String) {
         Log.d("[FlClash]", text)
     }
-
-    private lateinit var _application: Application
 
     fun init(application: Application) {
         _application = application

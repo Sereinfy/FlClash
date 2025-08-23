@@ -1,13 +1,12 @@
 package com.follow.clash.service
 
-import com.follow.clash.common.QuickAction
-import com.follow.clash.common.quickIntent
-import com.follow.clash.common.toPendingIntent
+import com.follow.clash.common.BroadcastAction
+import com.follow.clash.common.sendBroadcast
 
 interface IBaseService {
     fun handleCreate() {
         if (!State.inApp) {
-            QuickAction.START.quickIntent.toPendingIntent.send()
+            BroadcastAction.CREATE_VPN.sendBroadcast()
         } else {
             State.inApp = false
         }

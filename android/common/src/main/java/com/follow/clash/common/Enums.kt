@@ -9,6 +9,10 @@ enum class QuickAction {
     TOGGLE,
 }
 
+enum class BroadcastAction {
+    CREATE_VPN,
+}
+
 enum class AccessControlMode {
     @SerializedName("acceptSelected")
     ACCEPT_SELECTED,

@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
+    
+    <permission
+        android:name="${applicationId}.permission.RECEIVE_BROADCASTS"
+        android:protectionLevel="signature" />
 
     <uses-feature
         android:name="android.hardware.touchscreen"
@@ -24,7 +28,7 @@
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application
-        android:name=".FlClashApplication"
+        android:name=".Application"
         android:banner="@mipmap/ic_banner"
         android:extractNativeLibs="true"
         android:hardwareAccelerated="true"
@@ -93,8 +97,7 @@
             android:exported="true"
             android:icon="@drawable/ic"
             android:label="FlClash"
-            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE"
-            tools:targetApi="n">
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
             <intent-filter>
                 <action android:name="android.service.quicksettings.action.QS_TILE" />
             </intent-filter>
@@ -102,6 +105,17 @@
                 android:name="android.service.quicksettings.TOGGLEABLE_TILE"
                 android:value="true" />
         </service>
+
+        <receiver
+            android:name=".BroadcastReceiver"
+            android:enabled="true"
+            android:exported="true"
+            android:permission="${applicationId}.permission.RECEIVE_BROADCASTS">
+            <intent-filter>
+                <action android:name="${applicationId}.action.CREATE_VPN" />
+            </intent-filter>
+        </receiver>
+
 
         <provider
             android:name=".FilesProvider"

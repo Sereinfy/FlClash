@@ -94,7 +94,11 @@ class NotificationModule(private val service: Service) : Module() {
                 setContentTitle(params.title)
                 setContentText(contentText)
                 clearActions()
-                addAction(0, params.stopText, QuickAction.STOP.quickIntent.toPendingIntent).build()
+                addAction(
+                    0,
+                    params.stopText,
+                    QuickAction.STOP.quickIntent.toPendingIntent
+                ).build()
             })
     }
 
