@@ -61,7 +61,7 @@ class CoreService extends CoreHandlerInterface {
         }
       },
       (error, stack) async {
-        commonPrint.log('Service error: $error ${stack.toString()}');
+        commonPrint.log('Service error: $error');
         if (error is SocketException) {
           _handleInvokeCrashEvent();
         }
