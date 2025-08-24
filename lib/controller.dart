@@ -72,9 +72,11 @@ class AppController {
   }
 
   Future<void> restartCore() async {
-    commonPrint.log('restart core');
+    await coreController.shutdown();
+    _ref.read(coreStatusProvider.notifier).value = CoreStatus.connecting;
     await coreController.preload();
     await _initCore();
+    _ref.read(coreStatusProvider.notifier).value = CoreStatus.connected;
     if (_ref.read(isStartProvider)) {
       await globalState.handleStart();
     }

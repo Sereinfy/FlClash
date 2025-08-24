@@ -61,7 +61,7 @@ class CoreService extends CoreHandlerInterface {
         }
       },
       (error, stack) async {
-        commonPrint.log(error.toString());
+        commonPrint.log('Service error: $error ${stack.toString()}');
         if (error is SocketException) {
           _handleInvokeCrashEvent();
         }
@@ -124,21 +124,27 @@ class CoreService extends CoreHandlerInterface {
   Future<void> _destroySocket() async {
     if (socketCompleter.isCompleted) {
       final lastSocket = await socketCompleter.future;
-      await lastSocket.close();
       socketCompleter = Completer();
+      lastSocket.close();
     }
   }
 
   @override
   shutdown() async {
+    await _destroySocket();
     if (system.isWindows) {
       await request.stopCoreByHelper();
     }
-    await _destroySocket();
     process?.kill();
     process = null;
     return true;
   }
+
+  // void _clearCompleter() {
+  //   for (final completer in callbackCompleterMap.values) {
+  //     completer.safeCompleter(null);
+  //   }
+  // }
 
   @override
   Future<bool> preload() async {
@@ -152,7 +158,7 @@ class CoreService extends CoreHandlerInterface {
     required ActionMethod method,
     dynamic data,
     Duration? timeout,
-  }) {
+  }) async {
     final id = '${method.name}#${utils.id}';
 
     callbackCompleterMap[id] = Completer<T?>();
@@ -162,6 +168,8 @@ class CoreService extends CoreHandlerInterface {
     return (callbackCompleterMap[id] as Completer<T?>).future.withTimeout(
       timeout: timeout,
       onLast: () {
+        final completer = callbackCompleterMap[id];
+        completer?.safeCompleter(null);
         callbackCompleterMap.remove(id);
       },
       tag: id,

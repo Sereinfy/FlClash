@@ -41,6 +41,13 @@ class _DashboardViewState extends ConsumerState<DashboardView> {
     );
   }
 
+  void _handleConnection() {
+    final coreStatus = ref.read(coreStatusProvider);
+    if (coreStatus == CoreStatus.disconnected) {
+      globalState.appController.restartCore();
+    }
+  }
+
   List<Widget> _buildActions(bool isEdit) {
     return [
       if (!isEdit)
@@ -48,11 +55,7 @@ class _DashboardViewState extends ConsumerState<DashboardView> {
           builder: (_, ref, _) {
             final coreStatus = ref.watch(coreStatusProvider);
             return FilledButton.icon(
-              onPressed: () {
-                // if (!connected) {
-                //   globalState.appController.restartCore();
-                // }
-              },
+              onPressed: _handleConnection,
               style: FilledButton.styleFrom(
                 padding: EdgeInsets.symmetric(horizontal: 12),
                 backgroundColor: switch (coreStatus) {

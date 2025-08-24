@@ -92,8 +92,12 @@ class _CoreContainerState extends ConsumerState<CoreManager>
   }
 
   @override
-  void onCrash() {
+  Future<void> onCrash() async {
+    if (ref.read(coreStatusProvider) != CoreStatus.connected) {
+      return;
+    }
     ref.read(coreStatusProvider.notifier).value = CoreStatus.disconnected;
+    await coreController.shutdown();
     super.onCrash();
   }
 }

@@ -99,9 +99,7 @@ abstract class CoreHandlerInterface with CoreInterface {
   }
 
   @override
-  Future<bool> shutdown() async {
-    return await invoke<bool>(method: ActionMethod.shutdown) ?? false;
-  }
+  Future<bool> shutdown();
 
   @override
   Future<bool> get isInit async {

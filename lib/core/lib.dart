@@ -13,7 +13,7 @@ class CoreLib extends CoreHandlerInterface {
   CoreLib._internal();
 
   @override
-  preload() async {
+  Future<bool> preload() async {
     await service?.init();
     return true;
   }
@@ -30,7 +30,6 @@ class CoreLib extends CoreHandlerInterface {
 
   @override
   Future<bool> shutdown() async {
-    await super.shutdown();
     destroy();
     return true;
   }
