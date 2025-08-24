@@ -1717,22 +1717,22 @@ as String,
 
 
 /// @nodoc
-mixin _$AppMessage {
+mixin _$CoreEvent {
 
- AppMessageType get type; dynamic get data;
-/// Create a copy of AppMessage
+ CoreEventType get type; dynamic get data;
+/// Create a copy of CoreEvent
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-$AppMessageCopyWith<AppMessage> get copyWith => _$AppMessageCopyWithImpl<AppMessage>(this as AppMessage, _$identity);
+$CoreEventCopyWith<CoreEvent> get copyWith => _$CoreEventCopyWithImpl<CoreEvent>(this as CoreEvent, _$identity);
 
-  /// Serializes this AppMessage to a JSON map.
+  /// Serializes this CoreEvent to a JSON map.
   Map<String, dynamic> toJson();
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is AppMessage&&(identical(other.type, type) || other.type == type)&&const DeepCollectionEquality().equals(other.data, data));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is CoreEvent&&(identical(other.type, type) || other.type == type)&&const DeepCollectionEquality().equals(other.data, data));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -1741,18 +1741,18 @@ int get hashCode => Object.hash(runtimeType,type,const DeepCollectionEquality().
 
 @override
 String toString() {
-  return 'AppMessage(type: $type, data: $data)';
+  return 'CoreEvent(type: $type, data: $data)';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class $AppMessageCopyWith<$Res>  {
-  factory $AppMessageCopyWith(AppMessage value, $Res Function(AppMessage) _then) = _$AppMessageCopyWithImpl;
+abstract mixin class $CoreEventCopyWith<$Res>  {
+  factory $CoreEventCopyWith(CoreEvent value, $Res Function(CoreEvent) _then) = _$CoreEventCopyWithImpl;
 @useResult
 $Res call({
- AppMessageType type, dynamic data
+ CoreEventType type, dynamic data
 });
 
 
@@ -1760,19 +1760,19 @@ $Res call({
 
 }
 /// @nodoc
-class _$AppMessageCopyWithImpl<$Res>
-    implements $AppMessageCopyWith<$Res> {
-  _$AppMessageCopyWithImpl(this._self, this._then);
+class _$CoreEventCopyWithImpl<$Res>
+    implements $CoreEventCopyWith<$Res> {
+  _$CoreEventCopyWithImpl(this._self, this._then);
 
-  final AppMessage _self;
-  final $Res Function(AppMessage) _then;
+  final CoreEvent _self;
+  final $Res Function(CoreEvent) _then;
 
-/// Create a copy of AppMessage
+/// Create a copy of CoreEvent
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? type = null,Object? data = freezed,}) {
   return _then(_self.copyWith(
 type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
-as AppMessageType,data: freezed == data ? _self.data : data // ignore: cast_nullable_to_non_nullable
+as CoreEventType,data: freezed == data ? _self.data : data // ignore: cast_nullable_to_non_nullable
 as dynamic,
   ));
 }
@@ -1780,8 +1780,8 @@ as dynamic,
 }
 
 
-/// Adds pattern-matching-related methods to [AppMessage].
-extension AppMessagePatterns on AppMessage {
+/// Adds pattern-matching-related methods to [CoreEvent].
+extension CoreEventPatterns on CoreEvent {
 /// A variant of `map` that fallback to returning `orElse`.
 ///
 /// It is equivalent to doing:
@@ -1794,10 +1794,10 @@ extension AppMessagePatterns on AppMessage {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _AppMessage value)?  $default,{required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _CoreEvent value)?  $default,{required TResult orElse(),}){
 final _that = this;
 switch (_that) {
-case _AppMessage() when $default != null:
+case _CoreEvent() when $default != null:
 return $default(_that);case _:
   return orElse();
 
@@ -1816,10 +1816,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _AppMessage value)  $default,){
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _CoreEvent value)  $default,){
 final _that = this;
 switch (_that) {
-case _AppMessage():
+case _CoreEvent():
 return $default(_that);case _:
   throw StateError('Unexpected subclass');
 
@@ -1837,10 +1837,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _AppMessage value)?  $default,){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _CoreEvent value)?  $default,){
 final _that = this;
 switch (_that) {
-case _AppMessage() when $default != null:
+case _CoreEvent() when $default != null:
 return $default(_that);case _:
   return null;
 
@@ -1858,9 +1858,9 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( AppMessageType type,  dynamic data)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( CoreEventType type,  dynamic data)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
-case _AppMessage() when $default != null:
+case _CoreEvent() when $default != null:
 return $default(_that.type,_that.data);case _:
   return orElse();
 
@@ -1879,9 +1879,9 @@ return $default(_that.type,_that.data);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( AppMessageType type,  dynamic data)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( CoreEventType type,  dynamic data)  $default,) {final _that = this;
 switch (_that) {
-case _AppMessage():
+case _CoreEvent():
 return $default(_that.type,_that.data);case _:
   throw StateError('Unexpected subclass');
 
@@ -1899,9 +1899,9 @@ return $default(_that.type,_that.data);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( AppMessageType type,  dynamic data)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( CoreEventType type,  dynamic data)?  $default,) {final _that = this;
 switch (_that) {
-case _AppMessage() when $default != null:
+case _CoreEvent() when $default != null:
 return $default(_that.type,_that.data);case _:
   return null;
 
@@ -1913,27 +1913,27 @@ return $default(_that.type,_that.data);case _:
 /// @nodoc
 @JsonSerializable()
 
-class _AppMessage implements AppMessage {
-  const _AppMessage({required this.type, this.data});
-  factory _AppMessage.fromJson(Map<String, dynamic> json) => _$AppMessageFromJson(json);
+class _CoreEvent implements CoreEvent {
+  const _CoreEvent({required this.type, this.data});
+  factory _CoreEvent.fromJson(Map<String, dynamic> json) => _$CoreEventFromJson(json);
 
-@override final  AppMessageType type;
+@override final  CoreEventType type;
 @override final  dynamic data;
 
-/// Create a copy of AppMessage
+/// Create a copy of CoreEvent
 /// with the given fields replaced by the non-null parameter values.
 @override @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-_$AppMessageCopyWith<_AppMessage> get copyWith => __$AppMessageCopyWithImpl<_AppMessage>(this, _$identity);
+_$CoreEventCopyWith<_CoreEvent> get copyWith => __$CoreEventCopyWithImpl<_CoreEvent>(this, _$identity);
 
 @override
 Map<String, dynamic> toJson() {
-  return _$AppMessageToJson(this, );
+  return _$CoreEventToJson(this, );
 }
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AppMessage&&(identical(other.type, type) || other.type == type)&&const DeepCollectionEquality().equals(other.data, data));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _CoreEvent&&(identical(other.type, type) || other.type == type)&&const DeepCollectionEquality().equals(other.data, data));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -1942,18 +1942,18 @@ int get hashCode => Object.hash(runtimeType,type,const DeepCollectionEquality().
 
 @override
 String toString() {
-  return 'AppMessage(type: $type, data: $data)';
+  return 'CoreEvent(type: $type, data: $data)';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class _$AppMessageCopyWith<$Res> implements $AppMessageCopyWith<$Res> {
-  factory _$AppMessageCopyWith(_AppMessage value, $Res Function(_AppMessage) _then) = __$AppMessageCopyWithImpl;
+abstract mixin class _$CoreEventCopyWith<$Res> implements $CoreEventCopyWith<$Res> {
+  factory _$CoreEventCopyWith(_CoreEvent value, $Res Function(_CoreEvent) _then) = __$CoreEventCopyWithImpl;
 @override @useResult
 $Res call({
- AppMessageType type, dynamic data
+ CoreEventType type, dynamic data
 });
 
 
@@ -1961,19 +1961,19 @@ $Res call({
 
 }
 /// @nodoc
-class __$AppMessageCopyWithImpl<$Res>
-    implements _$AppMessageCopyWith<$Res> {
-  __$AppMessageCopyWithImpl(this._self, this._then);
+class __$CoreEventCopyWithImpl<$Res>
+    implements _$CoreEventCopyWith<$Res> {
+  __$CoreEventCopyWithImpl(this._self, this._then);
 
-  final _AppMessage _self;
-  final $Res Function(_AppMessage) _then;
+  final _CoreEvent _self;
+  final $Res Function(_CoreEvent) _then;
 
-/// Create a copy of AppMessage
+/// Create a copy of CoreEvent
 /// with the given fields replaced by the non-null parameter values.
 @override @pragma('vm:prefer-inline') $Res call({Object? type = null,Object? data = freezed,}) {
-  return _then(_AppMessage(
+  return _then(_CoreEvent(
 type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
-as AppMessageType,data: freezed == data ? _self.data : data // ignore: cast_nullable_to_non_nullable
+as CoreEventType,data: freezed == data ? _self.data : data // ignore: cast_nullable_to_non_nullable
 as dynamic,
   ));
 }

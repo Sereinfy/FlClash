@@ -147,22 +147,22 @@ Map<String, dynamic> _$UpdateGeoDataParamsToJson(
   'geo-name': instance.geoName,
 };
 
-_AppMessage _$AppMessageFromJson(Map<String, dynamic> json) => _AppMessage(
-  type: $enumDecode(_$AppMessageTypeEnumMap, json['type']),
+_CoreEvent _$CoreEventFromJson(Map<String, dynamic> json) => _CoreEvent(
+  type: $enumDecode(_$CoreEventTypeEnumMap, json['type']),
   data: json['data'],
 );
 
-Map<String, dynamic> _$AppMessageToJson(_AppMessage instance) =>
+Map<String, dynamic> _$CoreEventToJson(_CoreEvent instance) =>
     <String, dynamic>{
-      'type': _$AppMessageTypeEnumMap[instance.type]!,
+      'type': _$CoreEventTypeEnumMap[instance.type]!,
       'data': instance.data,
     };
 
-const _$AppMessageTypeEnumMap = {
-  AppMessageType.log: 'log',
-  AppMessageType.delay: 'delay',
-  AppMessageType.request: 'request',
-  AppMessageType.loaded: 'loaded',
+const _$CoreEventTypeEnumMap = {
+  CoreEventType.log: 'log',
+  CoreEventType.delay: 'delay',
+  CoreEventType.request: 'request',
+  CoreEventType.loaded: 'loaded',
 };
 
 _InvokeMessage _$InvokeMessageFromJson(Map<String, dynamic> json) =>

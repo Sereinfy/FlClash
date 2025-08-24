@@ -2,14 +2,15 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:fl_clash/clash/clash.dart';
-import 'package:fl_clash/clash/interface.dart';
 import 'package:fl_clash/common/common.dart';
+import 'package:fl_clash/core/core.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/models/core.dart';
 
-class ClashService extends ClashHandlerInterface {
-  static ClashService? _instance;
+import 'interface.dart';
+
+class CoreService extends CoreHandlerInterface {
+  static CoreService? _instance;
 
   Completer<ServerSocket> serverCompleter = Completer();
 
@@ -19,12 +20,12 @@ class ClashService extends ClashHandlerInterface {
 
   Process? process;
 
-  factory ClashService() {
-    _instance ??= ClashService._internal();
+  factory CoreService() {
+    _instance ??= CoreService._internal();
     return _instance!;
   }
 
-  ClashService._internal() {
+  CoreService._internal() {
     _initServer();
   }
 
@@ -32,7 +33,7 @@ class ClashService extends ClashHandlerInterface {
     final completer = callbackCompleterMap[result.id];
     final data = await parasResult(result);
     if (result.id?.isEmpty == true) {
-      clashMessage.controller.add(result.data);
+      coreEventManager.controller.add(result.data);
     }
     completer?.complete(data);
   }
@@ -165,4 +166,4 @@ class ClashService extends ClashHandlerInterface {
   }
 }
 
-final clashService = system.isDesktop ? ClashService() : null;
+final coreService = system.isDesktop ? CoreService() : null;

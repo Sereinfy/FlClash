@@ -12,6 +12,8 @@ import 'package:flutter/services.dart';
 
 abstract mixin class ServiceListener {
   void onServiceMessage(Map<String, Object?> data) {}
+
+  void onServiceCrash() {}
 }
 
 class Service {
@@ -41,6 +43,11 @@ class Service {
           }
           for (final listener in _listeners) {
             listener.onServiceMessage(result.data);
+          }
+          break;
+        case 'crash':
+          for (final listener in _listeners) {
+            listener.onServiceCrash();
           }
           break;
         default:

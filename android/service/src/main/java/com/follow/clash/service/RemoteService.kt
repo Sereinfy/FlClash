@@ -3,11 +3,8 @@ package com.follow.clash.service
 import android.app.Service
 import android.content.Intent
 import android.os.IBinder
-import com.follow.clash.common.QuickAction
 import com.follow.clash.common.ServiceDelegate
 import com.follow.clash.common.intent
-import com.follow.clash.common.quickIntent
-import com.follow.clash.common.toPendingIntent
 import com.follow.clash.core.Core
 import com.follow.clash.service.models.NotificationParams
 import com.follow.clash.service.models.VpnOptions
@@ -30,10 +27,6 @@ class RemoteService : Service(),
         }
     }
 
-    private fun handleSendStopAction() {
-        QuickAction.STOP.quickIntent.toPendingIntent.send()
-    }
-
     private fun handleStartService() {
         launch {
             val nextIntent = when (State.options?.enable == true) {
@@ -42,7 +35,7 @@ class RemoteService : Service(),
             }
             if (intent != nextIntent) {
                 delegate?.unbind()
-                delegate = ServiceDelegate(nextIntent, ::handleSendStopAction) { binder ->
+                delegate = ServiceDelegate(nextIntent) { binder ->
                     when (binder) {
                         is VpnService.LocalBinder -> binder.getService()
                         is CommonService.LocalBinder -> binder.getService()

@@ -126,7 +126,7 @@ enum ResultType {
   error,
 }
 
-enum AppMessageType { log, delay, request, loaded }
+enum CoreEventType { log, delay, request, loaded }
 
 enum InvokeMessageType { protect, process }
 

@@ -1,4 +1,5 @@
+export 'controller.dart';
 export 'core.dart';
+export 'event.dart';
 export 'lib.dart';
-export 'message.dart';
 export 'service.dart';

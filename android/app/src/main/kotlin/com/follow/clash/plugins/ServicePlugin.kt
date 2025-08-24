@@ -78,9 +78,6 @@ class ServicePlugin : FlutterPlugin, MethodChannel.MethodCallHandler,
         result.success(true)
     }
 
-    private fun handleServiceCrash() {
-    }
-
     private fun handleStop(result: MethodChannel.Result) {
         State.handleStopService()
         result.success(true)
@@ -110,7 +107,9 @@ class ServicePlugin : FlutterPlugin, MethodChannel.MethodCallHandler,
     }
 
     private fun onServiceCrash() {
-
+        launch {
+            flutterMethodChannel.invokeMethod("crash", null)
+        }
     }
 
     private fun handleSyncState(call: MethodCall, result: MethodChannel.Result) {

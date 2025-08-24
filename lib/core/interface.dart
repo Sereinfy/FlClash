@@ -6,7 +6,7 @@ import 'package:fl_clash/common/common.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/models/models.dart';
 
-mixin ClashInterface {
+mixin CoreInterface {
   Future<bool> init(InitParams params);
 
   Future<bool> preload();
@@ -73,7 +73,7 @@ mixin ClashInterface {
   FutureOr<bool> resetConnections();
 }
 
-abstract class ClashHandlerInterface with ClashInterface {
+abstract class CoreHandlerInterface with CoreInterface {
   FutureOr<bool> destroy();
 
   Future<T?> invoke<T>({
@@ -100,26 +100,17 @@ abstract class ClashHandlerInterface with ClashInterface {
 
   @override
   Future<bool> shutdown() async {
-    return await invoke<bool>(
-          method: ActionMethod.shutdown,
-        ) ??
-        false;
+    return await invoke<bool>(method: ActionMethod.shutdown) ?? false;
   }
 
   @override
   Future<bool> get isInit async {
-    return await invoke<bool>(
-          method: ActionMethod.getIsInit,
-        ) ??
-        false;
+    return await invoke<bool>(method: ActionMethod.getIsInit) ?? false;
   }
 
   @override
   Future<bool> forceGc() async {
-    return await invoke<bool>(
-          method: ActionMethod.forceGc,
-        ) ??
-        false;
+    return await invoke<bool>(method: ActionMethod.forceGc) ?? false;
   }
 
   @override
@@ -142,36 +133,25 @@ abstract class ClashHandlerInterface with ClashInterface {
 
   @override
   Future<Result> getConfig(String path) async {
-    return await invoke<Result>(
-          method: ActionMethod.getConfig,
-          data: path,
-        ) ??
+    return await invoke<Result>(method: ActionMethod.getConfig, data: path) ??
         Result<Map<String, dynamic>>.success({});
   }
 
   @override
   Future<String> setupConfig(SetupParams setupParams) async {
     final data = await Isolate.run(() => json.encode(setupParams));
-    return await invoke<String>(
-          method: ActionMethod.setupConfig,
-          data: data,
-        ) ??
+    return await invoke<String>(method: ActionMethod.setupConfig, data: data) ??
         '';
   }
 
   @override
   Future<bool> crash() async {
-    return await invoke<bool>(
-          method: ActionMethod.crash,
-        ) ??
-        false;
+    return await invoke<bool>(method: ActionMethod.crash) ?? false;
   }
 
   @override
   Future<Map> getProxies() async {
-    var map = await invoke<Map>(
-      method: ActionMethod.getProxies,
-    );
+    var map = await invoke<Map>(method: ActionMethod.getProxies);
     return map ?? {};
   }
 
@@ -186,9 +166,7 @@ abstract class ClashHandlerInterface with ClashInterface {
 
   @override
   Future<String> getExternalProviders() async {
-    return await invoke<String>(
-          method: ActionMethod.getExternalProviders,
-        ) ??
+    return await invoke<String>(method: ActionMethod.getExternalProviders) ??
         '';
   }
 
@@ -217,10 +195,7 @@ abstract class ClashHandlerInterface with ClashInterface {
   }) async {
     return await invoke<String>(
           method: ActionMethod.sideLoadExternalProvider,
-          data: json.encode({
-            'providerName': providerName,
-            'data': data,
-          }),
+          data: json.encode({'providerName': providerName, 'data': data}),
         ) ??
         '';
   }
@@ -236,34 +211,22 @@ abstract class ClashHandlerInterface with ClashInterface {
 
   @override
   Future<String> getConnections() async {
-    return await invoke<String>(
-          method: ActionMethod.getConnections,
-        ) ??
-        '';
+    return await invoke<String>(method: ActionMethod.getConnections) ?? '';
   }
 
   @override
   Future<bool> closeConnections() async {
-    return await invoke<bool>(
-          method: ActionMethod.closeConnections,
-        ) ??
-        false;
+    return await invoke<bool>(method: ActionMethod.closeConnections) ?? false;
   }
 
   @override
   Future<bool> resetConnections() async {
-    return await invoke<bool>(
-          method: ActionMethod.resetConnections,
-        ) ??
-        false;
+    return await invoke<bool>(method: ActionMethod.resetConnections) ?? false;
   }
 
   @override
   Future<bool> closeConnection(String id) async {
-    return await invoke<bool>(
-          method: ActionMethod.closeConnection,
-          data: id,
-        ) ??
+    return await invoke<bool>(method: ActionMethod.closeConnection, data: id) ??
         false;
   }
 
@@ -297,25 +260,17 @@ abstract class ClashHandlerInterface with ClashInterface {
 
   @override
   stopLog() {
-    invoke<bool>(
-      method: ActionMethod.stopLog,
-    );
+    invoke<bool>(method: ActionMethod.stopLog);
   }
 
   @override
   Future<bool> startListener() async {
-    return await invoke<bool>(
-          method: ActionMethod.startListener,
-        ) ??
-        false;
+    return await invoke<bool>(method: ActionMethod.startListener) ?? false;
   }
 
   @override
   Future<bool> stopListener() async {
-    return await invoke<bool>(
-          method: ActionMethod.stopListener,
-        ) ??
-        false;
+    return await invoke<bool>(method: ActionMethod.stopListener) ?? false;
   }
 
   @override
@@ -329,13 +284,7 @@ abstract class ClashHandlerInterface with ClashInterface {
           method: ActionMethod.asyncTestDelay,
           data: json.encode(delayParams),
         ) ??
-        json.encode(
-          Delay(
-            name: proxyName,
-            value: -1,
-            url: url,
-          ),
-        );
+        json.encode(Delay(name: proxyName, value: -1, url: url));
   }
 
   @override
@@ -349,9 +298,6 @@ abstract class ClashHandlerInterface with ClashInterface {
 
   @override
   Future<String> getMemory() async {
-    return await invoke<String>(
-          method: ActionMethod.getMemory,
-        ) ??
-        '';
+    return await invoke<String>(method: ActionMethod.getMemory) ?? '';
   }
 }

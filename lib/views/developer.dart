@@ -1,5 +1,5 @@
-import 'package:fl_clash/clash/core.dart';
 import 'package:fl_clash/common/common.dart';
+import 'package:fl_clash/core/controller.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/models/common.dart';
 import 'package:fl_clash/providers/config.dart';
@@ -38,7 +38,7 @@ class DeveloperView extends ConsumerWidget {
         ListItem(
           title: Text(appLocalizations.crashTest),
           onTap: () {
-            clashCore.clashInterface.crash();
+            coreController.crash();
           },
         ),
         ListItem(

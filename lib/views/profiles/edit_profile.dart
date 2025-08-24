@@ -2,8 +2,8 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:fl_clash/clash/clash.dart';
 import 'package:fl_clash/common/common.dart';
+import 'package:fl_clash/core/controller.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/models/models.dart';
 import 'package:fl_clash/pages/editor.dart';
@@ -108,7 +108,7 @@ class _EditProfileViewState extends State<EditProfileView> {
 
   Future<void> _handleSaveEdit(BuildContext context, String data) async {
     final message = await globalState.appController.safeRun<String>(() async {
-      final message = await clashCore.validateConfig(data);
+      final message = await coreController.validateConfig(data);
       return message;
     }, silence: false);
     if (message?.isNotEmpty == true) {

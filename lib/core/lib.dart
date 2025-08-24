@@ -7,10 +7,10 @@ import 'package:fl_clash/plugins/service.dart';
 
 import 'interface.dart';
 
-class ClashLib extends ClashHandlerInterface {
-  static ClashLib? _instance;
+class CoreLib extends CoreHandlerInterface {
+  static CoreLib? _instance;
 
-  ClashLib._internal();
+  CoreLib._internal();
 
   @override
   preload() async {
@@ -18,8 +18,8 @@ class ClashLib extends ClashHandlerInterface {
     return true;
   }
 
-  factory ClashLib() {
-    _instance ??= ClashLib._internal();
+  factory CoreLib() {
+    _instance ??= CoreLib._internal();
     return _instance!;
   }
 
@@ -52,4 +52,4 @@ class ClashLib extends ClashHandlerInterface {
   }
 }
 
-ClashLib? get clashLib => system.isAndroid ? ClashLib() : null;
+CoreLib? get coreLib => system.isAndroid ? CoreLib() : null;

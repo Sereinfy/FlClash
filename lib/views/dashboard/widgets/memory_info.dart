@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:fl_clash/clash/clash.dart';
 import 'package:fl_clash/common/common.dart';
+import 'package:fl_clash/core/controller.dart';
 import 'package:fl_clash/state.dart';
 import 'package:fl_clash/widgets/widgets.dart';
 import 'package:flutter/material.dart';
@@ -34,7 +34,7 @@ class _MemoryInfoState extends State<MemoryInfo> {
   Future<void> _updateMemory() async {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       final rss = ProcessInfo.currentRss;
-      _memoryStateNotifier.value = await clashCore.getMemory() + rss;
+      _memoryStateNotifier.value = await coreController.getMemory() + rss;
       timer = Timer(Duration(seconds: 2), () async {
         _updateMemory();
       });
@@ -48,7 +48,7 @@ class _MemoryInfoState extends State<MemoryInfo> {
       child: CommonCard(
         info: Info(iconData: Icons.memory, label: appLocalizations.memoryInfo),
         onPressed: () {
-          clashCore.requestGc();
+          coreController.requestGc();
         },
         child: Container(
           padding: baseInfoEdgeInsets.copyWith(top: 0),

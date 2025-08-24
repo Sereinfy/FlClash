@@ -3,8 +3,8 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:fl_clash/clash/core.dart';
 import 'package:fl_clash/common/common.dart';
+import 'package:fl_clash/core/controller.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -66,10 +66,7 @@ abstract class Profile with _$Profile {
   factory Profile.fromJson(Map<String, Object?> json) =>
       _$ProfileFromJson(json);
 
-  factory Profile.normal({
-    String? label,
-    String url = '',
-  }) {
+  factory Profile.normal({String? label, String url = ''}) {
     return Profile(
       label: label,
       url: url,
@@ -113,9 +110,9 @@ abstract class OverrideRule with _$OverrideRule {
 
 extension OverrideRuleExt on OverrideRule {
   List<Rule> get rules => switch (type == OverrideRuleType.override) {
-        true => overrideRules,
-        false => addedRules,
-      };
+    true => overrideRules,
+    false => addedRules,
+  };
 
   OverrideRule updateRules(List<Rule> Function(List<Rule> rules) builder) {
     if (type == OverrideRuleType.added) {
@@ -178,7 +175,7 @@ extension ProfileExtension on Profile {
   }
 
   Future<Profile> saveFile(Uint8List bytes) async {
-    final message = await clashCore.validateConfig(utf8.decode(bytes));
+    final message = await coreController.validateConfig(utf8.decode(bytes));
     if (message.isNotEmpty) {
       throw message;
     }
@@ -188,7 +185,7 @@ extension ProfileExtension on Profile {
   }
 
   Future<Profile> saveFileWithString(String value) async {
-    final message = await clashCore.validateConfig(value);
+    final message = await coreController.validateConfig(value);
     if (message.isNotEmpty) {
       throw message;
     }

@@ -1,8 +1,7 @@
-import 'package:fl_clash/clash/clash.dart';
 import 'package:fl_clash/common/common.dart';
+import 'package:fl_clash/core/core.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/models/models.dart';
-import 'package:fl_clash/plugins/service.dart';
 import 'package:fl_clash/providers/app.dart';
 import 'package:fl_clash/providers/config.dart';
 import 'package:fl_clash/providers/state.dart';
@@ -10,20 +9,17 @@ import 'package:fl_clash/state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class ClashManager extends ConsumerStatefulWidget {
+class CoreManager extends ConsumerStatefulWidget {
   final Widget child;
 
-  const ClashManager({
-    super.key,
-    required this.child,
-  });
+  const CoreManager({super.key, required this.child});
 
   @override
-  ConsumerState<ClashManager> createState() => _ClashContainerState();
+  ConsumerState<CoreManager> createState() => _CoreContainerState();
 }
 
-class _ClashContainerState extends ConsumerState<ClashManager>
-    with AppMessageListener, ServiceListener {
+class _CoreContainerState extends ConsumerState<CoreManager>
+    with CoreEventListener {
   @override
   Widget build(BuildContext context) {
     return widget.child;
@@ -32,8 +28,7 @@ class _ClashContainerState extends ConsumerState<ClashManager>
   @override
   void initState() {
     super.initState();
-    clashMessage.addListener(this);
-    service?.addListener(this);
+    coreEventManager.addListener(this);
     ref.listenManual(needSetupProvider, (prev, next) {
       if (prev != next) {
         globalState.appController.handleChangeProfile();
@@ -44,30 +39,22 @@ class _ClashContainerState extends ConsumerState<ClashManager>
         globalState.appController.updateClashConfigDebounce();
       }
     });
-    ref.listenManual(
-      appSettingProvider.select((state) => state.openLogs),
-      (prev, next) {
-        if (next) {
-          clashCore.startLog();
-        } else {
-          clashCore.stopLog();
-        }
-      },
-      fireImmediately: true,
-    );
+    ref.listenManual(appSettingProvider.select((state) => state.openLogs), (
+      prev,
+      next,
+    ) {
+      if (next) {
+        coreController.startLog();
+      } else {
+        coreController.stopLog();
+      }
+    }, fireImmediately: true);
   }
 
   @override
   Future<void> dispose() async {
-    clashMessage.removeListener(this);
-    service?.removeListener(this);
+    coreEventManager.removeListener(this);
     super.dispose();
-  }
-
-  @override
-  void onServiceMessage(Map<String, Object?> message) {
-    clashMessage.controller.add(message);
-    super.onServiceMessage(message);
   }
 
   @override
@@ -75,13 +62,9 @@ class _ClashContainerState extends ConsumerState<ClashManager>
     super.onDelay(delay);
     final appController = globalState.appController;
     appController.setDelay(delay);
-    debouncer.call(
-      FunctionTag.updateDelay,
-      () async {
-        appController.updateGroupsDebounce();
-      },
-      duration: const Duration(milliseconds: 5000),
-    );
+    debouncer.call(FunctionTag.updateDelay, () async {
+      appController.updateGroupsDebounce();
+    }, duration: const Duration(milliseconds: 5000));
   }
 
   @override
@@ -101,11 +84,9 @@ class _ClashContainerState extends ConsumerState<ClashManager>
 
   @override
   Future<void> onLoaded(String providerName) async {
-    ref.read(providersProvider.notifier).setProvider(
-          await clashCore.getExternalProvider(
-            providerName,
-          ),
-        );
+    ref
+        .read(providersProvider.notifier)
+        .setProvider(await coreController.getExternalProvider(providerName));
     globalState.appController.updateGroupsDebounce();
     super.onLoaded(providerName);
   }

@@ -3,33 +3,33 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:isolate';
 
-import 'package:fl_clash/clash/clash.dart';
-import 'package:fl_clash/clash/interface.dart';
 import 'package:fl_clash/common/common.dart';
+import 'package:fl_clash/core/core.dart';
+import 'package:fl_clash/core/interface.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/models/models.dart';
 import 'package:flutter/services.dart';
 import 'package:path/path.dart';
 
-class ClashCore {
-  static ClashCore? _instance;
-  late ClashHandlerInterface clashInterface;
+class CoreController {
+  static CoreController? _instance;
+  late CoreHandlerInterface _interface;
 
-  ClashCore._internal() {
+  CoreController._internal() {
     if (system.isAndroid) {
-      clashInterface = clashLib!;
+      _interface = coreLib!;
     } else {
-      clashInterface = clashService!;
+      _interface = coreService!;
     }
   }
 
-  factory ClashCore() {
-    _instance ??= ClashCore._internal();
+  factory CoreController() {
+    _instance ??= CoreController._internal();
     return _instance!;
   }
 
   Future<bool> preload() {
-    return clashInterface.preload();
+    return _interface.preload();
   }
 
   static Future<void> initGeo() async {
@@ -47,9 +47,7 @@ class ClashCore {
     ];
     try {
       for (final geoFileName in geoFileNameList) {
-        final geoFile = File(
-          join(homePath, geoFileName),
-        );
+        final geoFile = File(join(homePath, geoFileName));
         final isExists = await geoFile.exists();
         if (isExists) {
           continue;
@@ -66,105 +64,93 @@ class ClashCore {
   Future<bool> init(int version) async {
     await initGeo();
     final homeDirPath = await appPath.homeDirPath;
-    return await clashInterface.init(
-      InitParams(
-        homeDir: homeDirPath,
-        version: version,
-      ),
+    return await _interface.init(
+      InitParams(homeDir: homeDirPath, version: version),
     );
   }
 
   Future<void> shutdown() async {
-    await clashInterface.shutdown();
+    await _interface.shutdown();
   }
 
-  FutureOr<bool> get isInit => clashInterface.isInit;
+  FutureOr<bool> get isInit => _interface.isInit;
 
   FutureOr<String> validateConfig(String data) {
-    return clashInterface.validateConfig(data);
+    return _interface.validateConfig(data);
   }
 
   Future<String> updateConfig(UpdateParams updateParams) async {
-    return await clashInterface.updateConfig(updateParams);
+    return await _interface.updateConfig(updateParams);
   }
 
   Future<String> setupConfig(SetupParams setupParams) async {
-    return await clashInterface.setupConfig(setupParams);
+    return await _interface.setupConfig(setupParams);
   }
 
   Future<List<Group>> getProxiesGroups() async {
-    final proxies = await clashInterface.getProxies();
+    final proxies = await _interface.getProxies();
     if (proxies.isEmpty) return [];
     final groupNames = [
       UsedProxy.GLOBAL.name,
       ...(proxies[UsedProxy.GLOBAL.name]['all'] as List).where((e) {
         final proxy = proxies[e] ?? {};
         return GroupTypeExtension.valueList.contains(proxy['type']);
-      })
+      }),
     ];
     final groupsRaw = groupNames.map((groupName) {
       final group = proxies[groupName];
       group['all'] = ((group['all'] ?? []) as List)
-          .map(
-            (name) => proxies[name],
-          )
+          .map((name) => proxies[name])
           .where((proxy) => proxy != null)
           .toList();
       return group;
     }).toList();
-    return groupsRaw
-        .map(
-          (e) => Group.fromJson(e),
-        )
-        .toList();
+    return groupsRaw.map((e) => Group.fromJson(e)).toList();
   }
 
   FutureOr<String> changeProxy(ChangeProxyParams changeProxyParams) async {
-    return await clashInterface.changeProxy(changeProxyParams);
+    return await _interface.changeProxy(changeProxyParams);
   }
 
   Future<List<TrackerInfo>> getConnections() async {
-    final res = await clashInterface.getConnections();
+    final res = await _interface.getConnections();
     final connectionsData = json.decode(res) as Map;
     final connectionsRaw = connectionsData['connections'] as List? ?? [];
     return connectionsRaw.map((e) => TrackerInfo.fromJson(e)).toList();
   }
 
   void closeConnection(String id) {
-    clashInterface.closeConnection(id);
+    _interface.closeConnection(id);
   }
 
   void closeConnections() {
-    clashInterface.closeConnections();
+    _interface.closeConnections();
   }
 
   void resetConnections() {
-    clashInterface.resetConnections();
+    _interface.resetConnections();
   }
 
   Future<List<ExternalProvider>> getExternalProviders() async {
-    final externalProvidersRawString =
-        await clashInterface.getExternalProviders();
+    final externalProvidersRawString = await _interface.getExternalProviders();
     if (externalProvidersRawString.isEmpty) {
       return [];
     }
-    return Isolate.run<List<ExternalProvider>>(
-      () {
-        final externalProviders =
-            (json.decode(externalProvidersRawString) as List<dynamic>)
-                .map(
-                  (item) => ExternalProvider.fromJson(item),
-                )
-                .toList();
-        return externalProviders;
-      },
-    );
+    return Isolate.run<List<ExternalProvider>>(() {
+      final externalProviders =
+          (json.decode(externalProvidersRawString) as List<dynamic>)
+              .map((item) => ExternalProvider.fromJson(item))
+              .toList();
+      return externalProviders;
+    });
   }
 
   Future<ExternalProvider?> getExternalProvider(
-      String externalProviderName) async {
-    final externalProvidersRawString =
-        await clashInterface.getExternalProvider(externalProviderName);
+    String externalProviderName,
+  ) async {
+    final externalProvidersRawString = await _interface.getExternalProvider(
+      externalProviderName,
+    );
     if (externalProvidersRawString.isEmpty) {
       return null;
     }
@@ -175,39 +161,39 @@ class ClashCore {
   }
 
   Future<String> updateGeoData(UpdateGeoDataParams params) {
-    return clashInterface.updateGeoData(params);
+    return _interface.updateGeoData(params);
   }
 
   Future<String> sideLoadExternalProvider({
     required String providerName,
     required String data,
   }) {
-    return clashInterface.sideLoadExternalProvider(
-        providerName: providerName, data: data);
+    return _interface.sideLoadExternalProvider(
+      providerName: providerName,
+      data: data,
+    );
   }
 
-  Future<String> updateExternalProvider({
-    required String providerName,
-  }) async {
-    return clashInterface.updateExternalProvider(providerName);
+  Future<String> updateExternalProvider({required String providerName}) async {
+    return _interface.updateExternalProvider(providerName);
   }
 
   Future<bool> startListener() async {
-    return await clashInterface.startListener();
+    return await _interface.startListener();
   }
 
   Future<bool> stopListener() async {
-    return await clashInterface.stopListener();
+    return await _interface.stopListener();
   }
 
   Future<Delay> getDelay(String url, String proxyName) async {
-    final data = await clashInterface.asyncTestDelay(url, proxyName);
+    final data = await _interface.asyncTestDelay(url, proxyName);
     return Delay.fromJson(json.decode(data));
   }
 
   Future<Map<String, dynamic>> getConfig(String id) async {
     final profilePath = await appPath.getProfilePath(id);
-    final res = await clashInterface.getConfig(profilePath);
+    final res = await _interface.getConfig(profilePath);
     if (res.isSuccess) {
       return res.data;
     } else {
@@ -216,7 +202,7 @@ class ClashCore {
   }
 
   Future<Traffic> getTraffic(bool onlyStatisticsProxy) async {
-    final trafficString = await clashInterface.getTraffic(onlyStatisticsProxy);
+    final trafficString = await _interface.getTraffic(onlyStatisticsProxy);
     if (trafficString.isEmpty) {
       return Traffic();
     }
@@ -224,19 +210,17 @@ class ClashCore {
   }
 
   Future<IpInfo?> getCountryCode(String ip) async {
-    final countryCode = await clashInterface.getCountryCode(ip);
+    final countryCode = await _interface.getCountryCode(ip);
     if (countryCode.isEmpty) {
       return null;
     }
-    return IpInfo(
-      ip: ip,
-      countryCode: countryCode,
-    );
+    return IpInfo(ip: ip, countryCode: countryCode);
   }
 
   Future<Traffic> getTotalTraffic(bool onlyStatisticsProxy) async {
-    final totalTrafficString =
-        await clashInterface.getTotalTraffic(onlyStatisticsProxy);
+    final totalTrafficString = await _interface.getTotalTraffic(
+      onlyStatisticsProxy,
+    );
     if (totalTrafficString.isEmpty) {
       return Traffic();
     }
@@ -244,7 +228,7 @@ class ClashCore {
   }
 
   Future<int> getMemory() async {
-    final value = await clashInterface.getMemory();
+    final value = await _interface.getMemory();
     if (value.isEmpty) {
       return 0;
     }
@@ -252,24 +236,28 @@ class ClashCore {
   }
 
   void resetTraffic() {
-    clashInterface.resetTraffic();
+    _interface.resetTraffic();
   }
 
   void startLog() {
-    clashInterface.startLog();
+    _interface.startLog();
   }
 
   void stopLog() {
-    clashInterface.stopLog();
+    _interface.stopLog();
   }
 
   Future<void> requestGc() async {
-    await clashInterface.forceGc();
+    await _interface.forceGc();
   }
 
   Future<void> destroy() async {
-    await clashInterface.destroy();
+    await _interface.destroy();
+  }
+
+  Future<void> crash() async {
+    await _interface.crash();
   }
 }
 
-final clashCore = ClashCore();
+final coreController = CoreController();

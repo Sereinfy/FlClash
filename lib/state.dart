@@ -5,8 +5,8 @@ import 'dart:ffi' show Pointer;
 import 'package:animations/animations.dart';
 import 'package:dio/dio.dart';
 import 'package:dynamic_color/dynamic_color.dart';
-import 'package:fl_clash/clash/clash.dart';
 import 'package:fl_clash/common/theme.dart';
+import 'package:fl_clash/core/core.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/l10n/l10n.dart';
 import 'package:fl_clash/plugins/service.dart';
@@ -76,7 +76,7 @@ class GlobalState {
     );
     await _initDynamicColor();
     await init();
-    // appState = appState.copyWith(coreStatus: CoreStatus.connected);
+    appState = appState.copyWith(coreStatus: CoreStatus.connected);
     await window?.init(version);
   }
 
@@ -98,7 +98,7 @@ class GlobalState {
       utils.getLocaleForString(config.appSetting.locale) ??
           WidgetsBinding.instance.platformDispatcher.locale,
     );
-    await clashCore.preload();
+    await coreController.preload();
     await service?.syncAndroidState(globalState.getAndroidState());
   }
 
@@ -133,7 +133,7 @@ class GlobalState {
 
   Future<void> handleStart([UpdateTasks? tasks]) async {
     startTime ??= DateTime.now();
-    await clashCore.startListener();
+    await coreController.startListener();
     await service?.start();
     startUpdateTasks(tasks);
   }
@@ -144,7 +144,7 @@ class GlobalState {
 
   Future handleStop() async {
     startTime = null;
-    await clashCore.stopListener();
+    await coreController.stopListener();
     await service?.stop();
     stopUpdateTasks();
   }
@@ -405,7 +405,7 @@ class GlobalState {
   }
 
   Future<Map<String, dynamic>> getProfileConfig(String profileId) async {
-    final configMap = await clashCore.getConfig(profileId);
+    final configMap = await coreController.getConfig(profileId);
     configMap['rules'] = configMap['rule'];
     configMap.remove('rule');
     return configMap;

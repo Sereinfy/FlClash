@@ -7,16 +7,6 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'generated/core.freezed.dart';
 part 'generated/core.g.dart';
 
-abstract mixin class AppMessageListener {
-  void onLog(Log log) {}
-
-  void onDelay(Delay delay) {}
-
-  void onRequest(TrackerInfo connection) {}
-
-  void onLoaded(String providerName) {}
-}
-
 @freezed
 abstract class SetupParams with _$SetupParams {
   const factory SetupParams({
@@ -102,22 +92,18 @@ abstract class UpdateGeoDataParams with _$UpdateGeoDataParams {
 }
 
 @freezed
-abstract class AppMessage with _$AppMessage {
-  const factory AppMessage({
-    required AppMessageType type,
-    dynamic data,
-  }) = _AppMessage;
+abstract class CoreEvent with _$CoreEvent {
+  const factory CoreEvent({required CoreEventType type, dynamic data}) =
+      _CoreEvent;
 
-  factory AppMessage.fromJson(Map<String, Object?> json) =>
-      _$AppMessageFromJson(json);
+  factory CoreEvent.fromJson(Map<String, Object?> json) =>
+      _$CoreEventFromJson(json);
 }
 
 @freezed
 abstract class InvokeMessage with _$InvokeMessage {
-  const factory InvokeMessage({
-    required InvokeMessageType type,
-    dynamic data,
-  }) = _InvokeMessage;
+  const factory InvokeMessage({required InvokeMessageType type, dynamic data}) =
+      _InvokeMessage;
 
   factory InvokeMessage.fromJson(Map<String, Object?> json) =>
       _$InvokeMessageFromJson(json);
@@ -125,21 +111,15 @@ abstract class InvokeMessage with _$InvokeMessage {
 
 @freezed
 abstract class Delay with _$Delay {
-  const factory Delay({
-    required String name,
-    required String url,
-    int? value,
-  }) = _Delay;
+  const factory Delay({required String name, required String url, int? value}) =
+      _Delay;
 
   factory Delay.fromJson(Map<String, Object?> json) => _$DelayFromJson(json);
 }
 
 @freezed
 abstract class Now with _$Now {
-  const factory Now({
-    required String name,
-    required String value,
-  }) = _Now;
+  const factory Now({required String name, required String value}) = _Now;
 
   factory Now.fromJson(Map<String, Object?> json) => _$NowFromJson(json);
 }

@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:fl_clash/clash/clash.dart';
 import 'package:fl_clash/common/common.dart';
+import 'package:fl_clash/core/controller.dart';
 import 'package:fl_clash/models/models.dart';
 import 'package:fl_clash/widgets/widgets.dart';
 import 'package:flutter/material.dart';
@@ -28,7 +28,7 @@ class _ConnectionsViewState extends ConsumerState<ConnectionsView> {
     return [
       IconButton(
         onPressed: () async {
-          clashCore.closeConnections();
+          coreController.closeConnections();
           await _updateConnections();
         },
         icon: const Icon(Icons.delete_sweep_outlined),
@@ -67,12 +67,12 @@ class _ConnectionsViewState extends ConsumerState<ConnectionsView> {
 
   Future<void> _updateConnections() async {
     _connectionsStateNotifier.value = _connectionsStateNotifier.value.copyWith(
-      trackerInfos: await clashCore.getConnections(),
+      trackerInfos: await coreController.getConnections(),
     );
   }
 
   Future<void> _handleBlockConnection(String id) async {
-    clashCore.closeConnection(id);
+    coreController.closeConnection(id);
     await _updateConnections();
   }
 

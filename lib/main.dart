@@ -9,8 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'application.dart';
-import 'clash/core.dart';
 import 'common/common.dart';
+import 'core/controller.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -36,12 +36,12 @@ Future<void> _service(List<String> flags) async {
   Future(() async {
     app?.tip(appLocalizations.startVpn);
     final version = await system.version;
-    await clashCore.init(version);
+    await coreController.init(version);
     final clashConfig = globalState.config.patchClashConfig.copyWith.tun(
       enable: false,
     );
     final params = await globalState.getSetupParams(pathConfig: clashConfig);
-    await clashCore.setupConfig(params);
+    await coreController.setupConfig(params);
     await globalState.handleStart();
   });
 }

@@ -1,3 +1,4 @@
+import 'package:fl_clash/core/core.dart';
 import 'package:fl_clash/plugins/app.dart';
 import 'package:fl_clash/plugins/service.dart';
 import 'package:fl_clash/providers/providers.dart';
@@ -13,7 +14,8 @@ class AndroidManager extends ConsumerStatefulWidget {
   ConsumerState<AndroidManager> createState() => _AndroidContainerState();
 }
 
-class _AndroidContainerState extends ConsumerState<AndroidManager> {
+class _AndroidContainerState extends ConsumerState<AndroidManager>
+    with ServiceListener {
   @override
   void initState() {
     super.initState();
@@ -28,6 +30,25 @@ class _AndroidContainerState extends ConsumerState<AndroidManager> {
         service?.syncAndroidState(next);
       }
     });
+    service?.addListener(this);
+  }
+
+  @override
+  Future<void> dispose() async {
+    service?.removeListener(this);
+    super.dispose();
+  }
+
+  @override
+  void onServiceMessage(Map<String, Object?> message) {
+    coreEventManager.controller.add(message);
+    super.onServiceMessage(message);
+  }
+
+  @override
+  void onServiceCrash() {
+    // globalState.appController.coreCrash();
+    super.onServiceCrash();
   }
 
   @override

@@ -4,8 +4,8 @@ import 'dart:io';
 import 'dart:isolate';
 
 import 'package:archive/archive.dart';
-import 'package:fl_clash/clash/clash.dart';
 import 'package:fl_clash/common/archive.dart';
+import 'package:fl_clash/core/core.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/plugins/app.dart';
 import 'package:fl_clash/providers/providers.dart';
@@ -73,7 +73,7 @@ class AppController {
 
   Future<void> restartCore() async {
     commonPrint.log('restart core');
-    await clashService?.start();
+    await coreController.preload();
     await _initCore();
     if (_ref.read(isStartProvider)) {
       await globalState.handleStart();
@@ -97,7 +97,7 @@ class AppController {
       applyProfileDebounce();
     } else {
       await globalState.handleStop();
-      clashCore.resetTraffic();
+      coreController.resetTraffic();
       _ref.read(trafficsProvider.notifier).clear();
       _ref.read(totalTrafficProvider.notifier).value = Traffic();
       _ref.read(runTimeProvider.notifier).value = null;
@@ -120,9 +120,9 @@ class AppController {
     final onlyStatisticsProxy = _ref.read(
       appSettingProvider.select((state) => state.onlyStatisticsProxy),
     );
-    final traffic = await clashCore.getTraffic(onlyStatisticsProxy);
+    final traffic = await coreController.getTraffic(onlyStatisticsProxy);
     _ref.read(trafficsProvider.notifier).addTraffic(traffic);
-    _ref.read(totalTrafficProvider.notifier).value = await clashCore
+    _ref.read(totalTrafficProvider.notifier).value = await coreController
         .getTotalTraffic(onlyStatisticsProxy);
   }
 
@@ -149,7 +149,7 @@ class AppController {
   }
 
   Future<void> updateProviders() async {
-    _ref.read(providersProvider.notifier).value = await clashCore
+    _ref.read(providersProvider.notifier).value = await coreController
         .getExternalProviders();
   }
 
@@ -258,7 +258,7 @@ class AppController {
       return;
     }
     final realTunEnable = _ref.read(realTunEnableProvider);
-    final message = await clashCore.updateConfig(
+    final message = await coreController.updateConfig(
       updateParams.copyWith.tun(enable: realTunEnable),
     );
     if (message.isNotEmpty) throw message;
@@ -304,7 +304,7 @@ class AppController {
     final params = await globalState.getSetupParams(
       pathConfig: realPatchConfig,
     );
-    final message = await clashCore.setupConfig(params);
+    final message = await coreController.setupConfig(params);
     lastProfileModified = await _ref.read(
       currentProfileProvider.select((state) => state?.profileLastModified),
     );
@@ -314,7 +314,7 @@ class AppController {
   }
 
   Future _applyProfile() async {
-    await clashCore.requestGc();
+    await coreController.requestGc();
     await setupClashConfig();
     await updateGroups();
     await updateProviders();
@@ -367,7 +367,7 @@ class AppController {
     try {
       _ref.read(groupsProvider.notifier).value = await retry(
         task: () async {
-          return await clashCore.getProxiesGroups();
+          return await coreController.getProxiesGroups();
         },
         retryIf: (res) => res.isEmpty,
       );
@@ -394,11 +394,11 @@ class AppController {
     required String groupName,
     required String proxyName,
   }) async {
-    await clashCore.changeProxy(
+    await coreController.changeProxy(
       ChangeProxyParams(groupName: groupName, proxyName: proxyName),
     );
     if (_ref.read(appSettingProvider).closeConnections) {
-      clashCore.closeConnections();
+      coreController.closeConnections();
     }
     addCheckIpNumDebounce();
   }
@@ -433,8 +433,8 @@ class AppController {
       await savePreferences();
       await macOS?.updateDns(true);
       await proxy?.stopProxy();
-      await clashCore.shutdown();
-      await clashService?.destroy();
+      await coreController.shutdown();
+      await coreController.destroy();
     } finally {
       system.exit();
     }
@@ -508,9 +508,9 @@ class AppController {
   }
 
   Future<void> _initCore() async {
-    final isInit = await clashCore.isInit;
+    final isInit = await coreController.isInit;
     if (!isInit) {
-      await clashCore.init(globalState.appState.version);
+      await coreController.init(globalState.appState.version);
     }
     await applyProfile();
   }
@@ -827,6 +827,10 @@ class AppController {
     } else {
       window?.hide();
     }
+  }
+
+  void coreCrash() {
+    _ref.read(coreStatusProvider.notifier).value = CoreStatus.disconnected;
   }
 
   void updateMode() {
