@@ -11,7 +11,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
 abstract mixin class ServiceListener {
-  void onServiceMessage(Map<String, Object?> data) {}
+  void onServiceEvent(CoreEvent event) {}
 
   void onServiceCrash() {}
 }
@@ -35,14 +35,11 @@ class Service {
       switch (call.method) {
         case 'getVpnOptions':
           return handleGetVpnOptions();
-        case 'message':
+        case 'event':
           final data = call.arguments as String? ?? '';
           final result = ActionResult.fromJson(json.decode(data));
-          if (result.data.isEmpty) {
-            break;
-          }
           for (final listener in _listeners) {
-            listener.onServiceMessage(result.data);
+            listener.onServiceEvent(CoreEvent.fromJson(result.data));
           }
           break;
         case 'crash':

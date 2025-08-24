@@ -90,4 +90,10 @@ class _CoreContainerState extends ConsumerState<CoreManager>
     globalState.appController.updateGroupsDebounce();
     super.onLoaded(providerName);
   }
+
+  @override
+  void onCrash() {
+    ref.read(coreStatusProvider.notifier).value = CoreStatus.disconnected;
+    super.onCrash();
+  }
 }

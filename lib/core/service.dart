@@ -33,7 +33,7 @@ class CoreService extends CoreHandlerInterface {
     final completer = callbackCompleterMap[result.id];
     final data = await parasResult(result);
     if (result.id?.isEmpty == true) {
-      coreEventManager.controller.add(result.data);
+      coreEventManager.sendEvent(CoreEvent.fromJson(result.data));
     }
     completer?.complete(data);
   }
@@ -63,10 +63,14 @@ class CoreService extends CoreHandlerInterface {
       (error, stack) async {
         commonPrint.log(error.toString());
         if (error is SocketException) {
-          // globalState.showNotifier(error.toString());
+          _handleInvokeCrashEvent();
         }
       },
     );
+  }
+
+  void _handleInvokeCrashEvent() {
+    coreEventManager.sendEvent(CoreEvent(type: CoreEventType.crash));
   }
 
   Future<Socket> get socket => socketCompleter.future;

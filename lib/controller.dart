@@ -829,10 +829,6 @@ class AppController {
     }
   }
 
-  void coreCrash() {
-    _ref.read(coreStatusProvider.notifier).value = CoreStatus.disconnected;
-  }
-
   void updateMode() {
     _ref.read(patchClashConfigProvider.notifier).updateState((state) {
       final index = Mode.values.indexWhere((item) => item == state.mode);

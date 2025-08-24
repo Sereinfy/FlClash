@@ -163,6 +163,7 @@ const _$CoreEventTypeEnumMap = {
   CoreEventType.delay: 'delay',
   CoreEventType.request: 'request',
   CoreEventType.loaded: 'loaded',
+  CoreEventType.crash: 'crash',
 };
 
 _InvokeMessage _$InvokeMessageFromJson(Map<String, dynamic> json) =>

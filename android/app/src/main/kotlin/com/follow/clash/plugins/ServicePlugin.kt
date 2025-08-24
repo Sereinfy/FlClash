@@ -98,10 +98,10 @@ class ServicePlugin : FlutterPlugin, MethodChannel.MethodCallHandler,
 
     val semaphore = Semaphore(10)
 
-    fun handleSendMessage(value: String?) {
+    fun handleSendEvent(value: String?) {
         launch(Dispatchers.Main) {
             semaphore.withPermit {
-                flutterMethodChannel.invokeMethod("message", value)
+                flutterMethodChannel.invokeMethod("event", value)
             }
         }
     }
@@ -133,7 +133,7 @@ class ServicePlugin : FlutterPlugin, MethodChannel.MethodCallHandler,
             Service.bind()
             Service.setMessageCallback {
                 GlobalState.launch(Dispatchers.Main) {
-                    handleSendMessage(it)
+                    handleSendEvent(it)
                 }
             }
             result.success(true)

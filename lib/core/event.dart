@@ -12,30 +12,31 @@ abstract mixin class CoreEventListener {
   void onRequest(TrackerInfo connection) {}
 
   void onLoaded(String providerName) {}
+
+  void onCrash() {}
 }
 
 class CoreEventManager {
-  final controller = StreamController<Map<String, Object?>>();
+  final _controller = StreamController<CoreEvent>();
 
   CoreEventManager._() {
-    controller.stream.listen((message) {
-      if (message.isEmpty) {
-        return;
-      }
-      final m = CoreEvent.fromJson(message);
+    _controller.stream.listen((event) {
       for (final CoreEventListener listener in _listeners) {
-        switch (m.type) {
+        switch (event.type) {
           case CoreEventType.log:
-            listener.onLog(Log.fromJson(m.data));
+            listener.onLog(Log.fromJson(event.data));
             break;
           case CoreEventType.delay:
-            listener.onDelay(Delay.fromJson(m.data));
+            listener.onDelay(Delay.fromJson(event.data));
             break;
           case CoreEventType.request:
-            listener.onRequest(TrackerInfo.fromJson(m.data));
+            listener.onRequest(TrackerInfo.fromJson(event.data));
             break;
           case CoreEventType.loaded:
-            listener.onLoaded(m.data);
+            listener.onLoaded(event.data);
+            break;
+          case CoreEventType.crash:
+            listener.onCrash();
             break;
         }
       }
@@ -49,6 +50,10 @@ class CoreEventManager {
 
   bool get hasListeners {
     return _listeners.isNotEmpty;
+  }
+
+  void sendEvent(CoreEvent event) {
+    _controller.add(event);
   }
 
   void addListener(CoreEventListener listener) {
