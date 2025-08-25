@@ -85,8 +85,8 @@ class Request {
   }
 
   final Map<String, IpInfo Function(Map<String, dynamic>)> _ipInfoSources = {
-    'https://ipwho.is/': IpInfo.fromIpwhoIsJson,
-    'https://api.ip.sb/geoip/': IpInfo.fromIpSbJson,
+    'https://api.ip2location.io/': IpInfo.fromIpwhoIsJson,
+    'https://ip-api.io/json/': IpInfo.fromIpSbJson,
     'https://ipapi.co/json/': IpInfo.fromIpApiCoJson,
     'https://ipinfo.io/json/': IpInfo.fromIpInfoIoJson,
   };
