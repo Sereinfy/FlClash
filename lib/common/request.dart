@@ -91,10 +91,18 @@ class Request {
     'https://ipinfo.io/json/': IpInfo.fromIpInfoIoJson,
   };
 
-  Future<Result<IpInfo?>> checkIp({CancelToken? cancelToken}) async {
+  // 新增数据结构
+  class IpInfoResult {
+    final IpInfo info;
+    final String source;
+    IpInfoResult(this.info, this.source);
+  }
+
+  // 修改 checkIp 方法
+  Future<Result<IpInfoResult?>> checkIp({CancelToken? cancelToken}) async {
     var failureCount = 0;
     final futures = _ipInfoSources.entries.map((source) async {
-      final Completer<Result<IpInfo?>> completer = Completer();
+      final Completer<Result<IpInfoResult?>> completer = Completer();
       handleFailRes() {
         if (!completer.isCompleted && failureCount == _ipInfoSources.length) {
           completer.complete(Result.success(null));
@@ -110,7 +118,9 @@ class Request {
       );
       future.then((res) {
         if (res.statusCode == HttpStatus.ok && res.data != null) {
-          completer.complete(Result.success(source.value(res.data!)));
+          completer.complete(Result.success(
+            IpInfoResult(source.value(res.data!), source.key),
+          ));
         } else {
           failureCount++;
           handleFailRes();

@@ -116,14 +116,29 @@ class _NetworkDetectionState extends ConsumerState<NetworkDetection> {
                     height: globalState.measure.bodyMediumHeight + 2,
                     child: FadeThroughBox(
                       child: ipInfo != null
-                          ? TooltipText(
-                              text: Text(
-                                ipInfo.ip,
-                                style: context.textTheme.bodyMedium?.toLight
-                                    .adjustSize(1),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                              ),
+                          ? Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                TooltipText(
+                                  text: Text(
+                                    ipInfo.info.ip, // 注意这里 info
+                                    style: context.textTheme.bodyMedium?.toLight
+                                        .adjustSize(1),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                                SizedBox(height: 2),
+                                Text(
+                                  ipInfo.source, // 显示API来源
+                                  style: context.textTheme.bodySmall?.copyWith(
+                                    color: Colors.grey,
+                                    fontSize: 10,
+                                  ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ],
                             )
                           : FadeThroughBox(
                               child: isLoading == false && ipInfo == null
