@@ -99,17 +99,19 @@ class _NetworkDetectionState extends ConsumerState<NetworkDetection> {
                             );
                           },
                           icon: ipInfo != null && ipInfo.apiIndex != null
-                              ? Text(
-                                  ipInfo.apiIndex,
-                                  style: TextStyle(
-                                    fontSize: 16.ap,
-                                    color: context.colorScheme.onSurfaceVariant,
-                                    fontWeight: FontWeight.bold,
+                              ? Center(
+                                  child: Text(
+                                    ipInfo.apiIndex,
+                                    style: TextStyle(
+                                      fontSize: 16.ap,
+                                      color: context.colorScheme.onSurfaceVariant,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
                                 )
                               : Icon(
-                                  size: 16.ap,
                                   Icons.info_outline,
+                                  size: 16.ap,
                                   color: context.colorScheme.onSurfaceVariant,
                                 ),
                         ),
