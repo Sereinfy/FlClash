@@ -10,6 +10,12 @@ import 'package:fl_clash/models/models.dart';
 import 'package:fl_clash/state.dart';
 import 'package:flutter/cupertino.dart';
 
+class IpInfoWithSource {
+  final String apiIndex;
+  final IpInfo? info;
+  IpInfoWithSource(this.apiIndex, this.info);
+}
+
 class Request {
   late final Dio _dio;
   late final Dio _clashDio;
@@ -82,12 +88,6 @@ class Request {
         utils.compareVersions(remoteVersion.replaceAll('v', ''), version) > 0;
     if (!hasUpdate) return null;
     return data;
-  }
-
-  class IpInfoWithSource {
-    final String apiIndex;
-    final IpInfo? info;
-    IpInfoWithSource(this.apiIndex, this.info);
   }
 
   final Map<String, MapEntry<String, IpInfo Function(Map<String, dynamic>)>> _ipInfoSources = {
