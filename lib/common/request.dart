@@ -84,17 +84,25 @@ class Request {
     return data;
   }
 
-  final Map<String, IpInfo Function(Map<String, dynamic>)> _ipInfoSources = {
-    'https://api.ip2location.io/': IpInfo.fromIpwhoIsJson,
-    'https://ip-api.io/json/': IpInfo.fromIpSbJson,
-    'https://ipapi.co/json/': IpInfo.fromIpApiCoJson,
-    'https://ipinfo.io/json/': IpInfo.fromIpInfoIoJson,
+  class IpInfoWithSource {
+    final String apiIndex;
+    final IpInfo? info;
+    IpInfoWithSource(this.apiIndex, this.info);
+  }
+
+  final Map<String, MapEntry<String, IpInfo Function(Map<String, dynamic>)>> _ipInfoSources = {
+    '①': MapEntry('https://api.ip2location.io/', IpInfo.fromIpwhoIsJson),
+    '②': MapEntry('https://ip-api.io/json/', IpInfo.fromIpSbJson),
+    '③': MapEntry('https://ipapi.co/json/', IpInfo.fromIpApiCoJson),
+    '④': MapEntry('https://ipinfo.io/json/', IpInfo.fromIpInfoIoJson),
   };
 
-  Future<Result<IpInfo?>> checkIp({CancelToken? cancelToken}) async {
+  Future<Result<IpInfoWithSource?>> checkIp({CancelToken? cancelToken}) async {
     var failureCount = 0;
-    final futures = _ipInfoSources.entries.map((source) async {
-      final Completer<Result<IpInfo?>> completer = Completer();
+    final futures = _ipInfoSources.entries.map((entry) async {
+      final apiIndex = entry.key;
+      final source = entry.value;
+      final Completer<Result<IpInfoWithSource?>> completer = Completer();
       handleFailRes() {
         if (!completer.isCompleted && failureCount == _ipInfoSources.length) {
           completer.complete(Result.success(null));
@@ -110,7 +118,7 @@ class Request {
       );
       future.then((res) {
         if (res.statusCode == HttpStatus.ok && res.data != null) {
-          completer.complete(Result.success(source.value(res.data!)));
+          completer.complete(Result.success(IpInfoWithSource(apiIndex, source.value(res.data!))));
         } else {
           failureCount++;
           handleFailRes();

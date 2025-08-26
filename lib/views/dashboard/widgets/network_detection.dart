@@ -98,11 +98,20 @@ class _NetworkDetectionState extends ConsumerState<NetworkDetection> {
                               cancelable: false,
                             );
                           },
-                          icon: Icon(
-                            size: 16.ap,
-                            Icons.info_outline,
-                            color: context.colorScheme.onSurfaceVariant,
-                          ),
+                          icon: ipInfo != null && ipInfo.apiIndex != null
+                              ? Text(
+                                  ipInfo.apiIndex,
+                                  style: TextStyle(
+                                    fontSize: 16.ap,
+                                    color: context.colorScheme.onSurfaceVariant,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                )
+                              : Icon(
+                                  size: 16.ap,
+                                  Icons.info_outline,
+                                  color: context.colorScheme.onSurfaceVariant,
+                                ),
                         ),
                       )
                     ],
