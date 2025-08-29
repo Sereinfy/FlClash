@@ -1,3 +1,9 @@
+## v0.8.87.8
+
+- Update general.dart
+
+- Update changelog
+
 ## v0.8.87.7
 
 - Update general.dart
