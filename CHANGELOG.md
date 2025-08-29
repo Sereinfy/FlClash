@@ -1,3 +1,15 @@
+## v0.8.87.7
+
+- Update general.dart
+
+## v0.8.87.1
+
+- android only
+
+- 更换API
+
+- Update changelog
+
 ## v0.8.87
 
 - Optimize desktop view
